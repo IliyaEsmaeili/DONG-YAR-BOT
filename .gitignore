@@ -1,4 +1,4 @@
 .env
-.idea
-.venv
-assets/not_public
+.idea/
+.venv/
+assets/not_public/
