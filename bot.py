@@ -49,17 +49,18 @@ def send_bot_guid_to_gap(message):
 @bot.message_handler(regexp="دنگ")
 def send_bot_guid_to_gap(message):
     if message.chat.type != "group": return
-    bot.send_photo(message.chat.id, "./assets/heared_dong.png", """شنیدم یکی گفت «دنگ»! 👀👂
+
+    bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("./assets/heared_dong.png", "dong_yar_bot"),
+                   caption="""شنیدم یکی گفت «دنگ»! 👀👂
 گوشام تیز شد! کسی خرجی کرده؟ اگه می‌خواید حساب و کتاب کنید و دنگ‌ها رو جمع کنید، کار رو بسپارید به من!
 کافیه مادرخرج روی دکمه زیر کلیک کنه تا پرونده این دورهمی رو باز کنیم و بیفتیم به جون بدهکارا! 💸😎
     """)
 
 
-
 # ----------
 # CALL BACK HANDLERS
 # ----------
-@bot.callback_query_handler(func=lambda call: call.data == "show_commands_xlist")
+@bot.callback_query_handler(func=lambda call: call.data == "show_commands_list")
 def handle_show_commands(callback_query):
     bot.answer_callback_query(callback_query.id)
     bot.send_message(callback_query.from_user.id, "LIST OF COMMANDS")
