@@ -28,25 +28,32 @@
 ```bash
 git clone [repository_url]
 cd DONG-YAR-BOT
+```
 
 ### 2. Install dependencies
+
 Make sure you have Python installed. Then run:
-bash
+```bash
 pip install pyTelegramBotAPI python-dotenv
+```
 *(**Note:** Use `pip3` on Unix-based OS)*
 
 ### 3. Environment Variables (.env)
-Create a `.env` file in the root directory and add your bot token. By default, the code looks for a Bale Bot Token:
-env
+Create a `.env` file in the root directory and add your bot token. By default, the code looks for a Bale Bot Token:  
+  *(put this line in your `.env` file)*
+```bash
 BALE_BOT_TOKEN=your_bale_bot_token_here
+```
 *(**Note:** Do not put spaces around the `=` sign)*
 
 ### 4. Running for Bale vs. Telegram
 
 **For Bale Messenger (بله):**
-The code is currently configured for Bale by default (due to development network constraints, Telegram will be the default upon completion). Just run:
-bash
+The code is currently configured for Bale by default  
+(due to development network constraints, Telegram will be the default upon completion). Just run:  
+```bash
 python bot.py
+```
 *(**Note:** Use `python3` on Unix-based OS)*
 
 **For Telegram (تلگرام):**
@@ -54,6 +61,8 @@ If you want to use this bot on Telegram instead of Bale:
 1. Change the variable name in your `.env` file to `TELEGRAM_BOT_TOKEN` (optional, but recommended for clarity).
 2. Update the Python code to load the new variable name.
 3. **Crucial:** Remove or comment out this line in your code, as it redirects requests to Bale's API:
-python
-# Remove this line for Telegram!
-# apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
+
+### 5. ⚠️Remove this line(on bale.py) for Telegram use!⚠️
+```python
+apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
+```
