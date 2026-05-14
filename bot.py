@@ -1,17 +1,20 @@
 import os
 from dotenv import load_dotenv
-
 import telebot
 from telebot import apihelper
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 load_dotenv()
 TOKEN = os.getenv("BALE_BOT_TOKEN")
+TELEGRAM_TOKEN = os.getenv("BALE_BOT_TOKEN")
 if TOKEN is None:
     raise ValueError("BALE_BOT_TOKEN is missing! Check your .env file.")
-apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
 
+apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
 bot = telebot.TeleBot(TOKEN)
+
+
+
 
 
 # ----------
@@ -19,9 +22,7 @@ bot = telebot.TeleBot(TOKEN)
 # ----------
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    if message.chat.type == "group":
-        print("group chat /start detected")
-        return
+    if message.chat.type == "group": return
     bot.send_message(message.chat.id, """سلام! ✋ به دنگ‌ یار خوش اومدی! 💸  
   
 من اینجام تا دیگه هیچ‌وقت سر حساب و کتاب دورهمی‌ها، سفرها و کافه‌ها به مشکل نخورید.  
@@ -54,7 +55,8 @@ def send_bot_guid_to_gap(message):
                    caption="""شنیدم یکی گفت «دنگ»! 👀👂
 گوشام تیز شد! کسی خرجی کرده؟ اگه می‌خواید حساب و کتاب کنید و دنگ‌ها رو جمع کنید، کار رو بسپارید به من!
 کافیه مادرخرج روی دکمه زیر کلیک کنه تا پرونده این دورهمی رو باز کنیم و بیفتیم به جون بدهکارا! 💸😎
-    """)
+    """, reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="ایجاد دنگ جدید", callback_data="set_up_new_dong"), ]]))
 
 
 # ----------
@@ -64,6 +66,12 @@ def send_bot_guid_to_gap(message):
 def handle_show_commands(callback_query):
     bot.answer_callback_query(callback_query.id)
     bot.send_message(callback_query.from_user.id, "LIST OF COMMANDS")
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "set_up_new_dong")
+def handle_set_up_new_dong(call_back_query):
+    bot.answer_callback_query(call_back_query.id)
+    bot.send_message(call_back_query.from_user.id, "setup dong")
 
 
 bot.infinity_polling()
