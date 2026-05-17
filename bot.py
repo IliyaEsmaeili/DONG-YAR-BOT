@@ -3,16 +3,14 @@ from dotenv import load_dotenv
 import telebot
 from telebot import apihelper
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-
 load_dotenv()
-TOKEN = os.getenv("BALE_BOT_TOKEN")
-TELEGRAM_TOKEN = os.getenv("BALE_BOT_TOKEN")
-if TOKEN is None:
+BALE_TOKEN = os.getenv("BALE_BOT_TOKEN")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+if BALE_TOKEN is None:
     raise ValueError("BALE_BOT_TOKEN is missing! Check your .env file.")
 
 apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
-bot = telebot.TeleBot(TOKEN)
-
+bot = telebot.TeleBot(BALE_TOKEN)
 
 
 
@@ -42,7 +40,7 @@ def send_bot_guid_to_gap(message):
     if message.chat.type != "group": return
     bot.reply_to(message, text="guide", reply_markup=InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(text="set up a dong")
+            InlineKeyboardButton(text= "دنگ" )
         ]
     ]))
 
@@ -64,9 +62,7 @@ def send_bot_guid_to_gap(message):
 # ----------
 @bot.callback_query_handler(func=lambda call: call.data == "show_commands_list")
 def handle_show_commands(callback_query):
-    bot.answer_callback_query(callback_query.id)
-    bot.send_message(callback_query.from_user.id, "LIST OF COMMANDS")
-
+    bot.answer_callback_query(callback_query.id )
 
 @bot.callback_query_handler(func=lambda call: call.data == "set_up_new_dong")
 def handle_set_up_new_dong(call_back_query):
