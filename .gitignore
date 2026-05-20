@@ -2,3 +2,6 @@
 .idea/
 .venv/
 assets/not_public/
+__pycache__/
+*.pyc
+

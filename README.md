@@ -52,7 +52,7 @@ BALE_BOT_TOKEN=your_bale_bot_token_here
 The code is currently configured for Bale by default  
 (due to development network constraints, Telegram will be the default upon completion). Just run:  
 ```bash
-python bot.py
+python bot_main.py
 ```
 *(**Note:** Use `python3` on Unix-based OS)*
 
