@@ -1,6 +1,6 @@
 # 💸 Dongyar Bot (ربات دنگ یار)
 
-<img src="./assets/profile_picture.png" width="120" align="right" alt="Dongyar Avatar">
+<img src="./assets/profile_picture copy_background_removed.png" width="150" align="right" alt="Dongyar Avatar">
 
 **Dongyar** is an open-source bot for [Bale](https://bale.ai/) and [Telegram](https://telegram.org/) designed to make bill splitting and group expense management incredibly easy. 
 
