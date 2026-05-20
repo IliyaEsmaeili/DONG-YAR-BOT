@@ -34,6 +34,13 @@ def heard_dong():
 
 
 def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" "):
+    # Check if participants is a list, and transform it into a clean layout
+    if isinstance(participants, list):
+        # This joins each name with a new line and a bullet point emoji
+        participants_text = "\n".join([f"  🔸 {p}" for p in participants])
+    else:
+        participants_text = participants
+
     return f"""💸 ساخت دنگ جدید
 
 ━━━━━━━━━━━━━━━━
@@ -45,7 +52,7 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
 {amount}
 
 👥 افراد شریک
-{participants}
+{participants_text}
 
 📝 توضیحات
 {info}

@@ -1,16 +1,22 @@
+import telebot.types
+
+
 class Dong :
     id : int
     name : str
     amount : int
     participants : list
+
     additional_info : str
-    def __init__(self, id = None, name = None, amount = None, participants =None, additional_info = None):
+    big_prompt_message : telebot.types.Message
+    def __init__(self, id = None, name = None, amount = None, participants =None, additional_info = None , big_prompt_message = None):
         super().__init__()
         self.id = id
         self.name = name
         self.amount = amount
         self.participants = participants
         self.additional_info = additional_info
+        self.big_prompt_message = big_prompt_message
 
     def __repr__(self):
         return f"Dong(id={self.id}, name={self.name}, amount={self.amount}, participants={self.participants}, additional_info={self.additional_info})"
