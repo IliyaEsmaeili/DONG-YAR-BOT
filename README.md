@@ -7,6 +7,8 @@
 > [!NOTE]
 > This project is currently a **Work In Progress (WIP)**. Many features are still under development!
 
+> [!IMPORTANT]
+> This project is currently in pre-release (prior to v1.0.0). It is not yet stable or production-ready, and you may encounter bugs, including threading issues.
 ---
 
 ## 🌟 Features 
