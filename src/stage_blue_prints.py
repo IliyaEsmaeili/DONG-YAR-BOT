@@ -1,10 +1,7 @@
-import bot_instance
-import data
-
-bot = bot_instance.bot  # to be more clear where bot came from
-import message_template as mt
+import bot_instance, data, message_template as mt
 from data import Dong, User
 
+bot = bot_instance.bot  # to be more clear where bot came from
 user_sessions = {}
 
 

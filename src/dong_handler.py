@@ -1,5 +1,5 @@
 import message_template as mt
-from bot_instance import bot
+from src.bot_instance import bot
 import stage_blue_prints as stages
 
 def set_up_dong(call_back):

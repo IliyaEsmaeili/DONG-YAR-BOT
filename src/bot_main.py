@@ -1,0 +1,67 @@
+import telebot
+import bot_instance
+import message_template as mt
+import dong_handler as dong
+import keyboards
+bot = bot_instance.bot
+
+# ----------
+# MESSAGE HANDLERS
+# ----------
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    if message.chat.type == "group": return #Avoid Sending message in groups
+    # temp_message_to_activate_keyboard = bot.send_message(message.chat.id , text= mt.activating_main_keyboard() , reply_markup=keyboards.main_keyboard)
+
+    bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
+    bot.send_message(message.chat.id , text= mt.welcome_menu_on_start() , reply_markup=keyboards.start_inline)
+
+
+
+@bot.message_handler(regexp="دنگ")
+def send_bot_guid_to_gap(message):
+    if message.chat.type != "group": return
+
+    bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
+                   caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
+
+
+@bot.message_handler(func=lambda message : message.text == "گیت‌هاب 💻")
+def github_info_handler(message):
+    bot.reply_to(message , mt.github_info_message())
+
+@bot.message_handler(func=lambda message : message.text == "ربات در تلگرام ✈️")
+def telegram_bot_id_handler(message):
+    bot.reply_to(message , mt.telegram_info_message())
+
+@bot.message_handler(func=lambda message : message.text == "سازنده کیه؟ 👨‍💻")
+def developer_info_handler(message):
+    bot.reply_to(message , mt.developer_info_message())
+
+@bot.message_handler(func=lambda message : message.text == "درباره بات 🤖")
+def bot_info_handler(message):
+    bot.reply_to(message , mt.bot_info_message())
+
+@bot.message_handler(func=lambda message : message.text == "دونیت ☕")
+def donate_info_handler(message):
+    bot.reply_to(message , mt.donate_info_message())
+
+
+
+# ----------
+# CALL BACK HANDLERS
+# ----------
+@bot.callback_query_handler(func=lambda call: call.data == "usage_guide")
+def handle_show_usage_guide(callback_query):
+    bot.answer_callback_query(callback_query.id)
+    bot.send_message(chat_id=callback_query.from_user.id, text= mt.guide_message())
+
+@bot.callback_query_handler(func=lambda call: call.data == "set_up_new_dong")
+def handle_set_up_new_dong(call_back_query):
+    bot.answer_callback_query(call_back_query.id)
+    dong.set_up_dong(call_back=call_back_query)
+
+
+
+
+bot.infinity_polling()
