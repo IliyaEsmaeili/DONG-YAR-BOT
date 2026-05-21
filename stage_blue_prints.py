@@ -8,10 +8,11 @@ from data import Dong, User
 user_sessions = {}
 
 
-def stage_begin(message):
+def stage_begin(message , group_id):
     user = User(dong=Dong())
     user.messanger_id = message.from_user.id
     user.dong.id = "dong_" + str(user.messanger_id)
+    user.dong.group_id = group_id
     bot_message = bot.send_message(message.from_user.id,
                                    mt.dong_creation_main_prompt(prompt=mt.stage_name_prompt(), step=0))
     user.big_prompt_message = bot_message
@@ -78,7 +79,11 @@ def stage_confirm(message):
                                                                           participants=user.dong.participants,
                                                                           info=user.dong.additional_info))
     bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    # bot.send_message(message.id , bot_message)
+    bot.send_message(chat_id= user.dong.group_id , text= mt.dong_creation_main_prompt(prompt=" ", step=5,
+                                                                          dong_name=user.dong.name,
+                                                                          amount=user.dong.amount,
+                                                                          participants=user.dong.participants,
+                                                                          info=user.dong.additional_info))
     data.user_list.append(user)
     print(data.user_list)
     del user_sessions[message.from_user.id]

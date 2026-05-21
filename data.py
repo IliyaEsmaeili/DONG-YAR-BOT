@@ -6,10 +6,10 @@ class Dong :
     name : str
     amount : int
     participants : list
-
     additional_info : str
     big_prompt_message : telebot.types.Message
-    def __init__(self, id = None, name = None, amount = None, participants =None, additional_info = None , big_prompt_message = None):
+    group_id : int
+    def __init__(self, id = None, name = None, amount = None, participants =None, additional_info = None , big_prompt_message = None , group_id = None):
         super().__init__()
         self.id = id
         self.name = name
@@ -17,6 +17,7 @@ class Dong :
         self.participants = participants
         self.additional_info = additional_info
         self.big_prompt_message = big_prompt_message
+        self.group_id = group_id
 
     def __repr__(self):
         return f"Dong(id={self.id}, name={self.name}, amount={self.amount}, participants={self.participants}, additional_info={self.additional_info})"
