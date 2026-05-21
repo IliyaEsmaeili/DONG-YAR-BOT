@@ -21,7 +21,7 @@ def stage_begin(message , group_id):
 
 
 def stage_name(message):
-    user = user_sessions.get(message.from_user.id)
+    user = user_sessions[message.from_user.id]
     user.dong.name = message.text
     bot_message = user.big_prompt_message
     bot_message = bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message.id,
@@ -32,7 +32,7 @@ def stage_name(message):
 
 
 def stage_amount(message):
-    user = user_sessions.get(message.from_user.id)
+    user = user_sessions[message.from_user.id]
     user.dong.amount = message.text
     bot_message = user.big_prompt_message
     bot_message = bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message.id,
@@ -43,7 +43,7 @@ def stage_amount(message):
 
 
 def stage_participants(message):
-    user = user_sessions.get(message.from_user.id)
+    user = user_sessions[message.from_user.id]
     participants = message.text.split(" ")
     user.dong.participants = participants
     bot_message = user.big_prompt_message
@@ -57,7 +57,7 @@ def stage_participants(message):
 
 
 def stage_additional_info(message):
-    user = user_sessions.get(message.from_user.id)
+    user = user_sessions[message.from_user.id]
     user.dong.additional_info = message.text
     bot_message = user.big_prompt_message
     bot_message = bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message.id,
@@ -70,9 +70,9 @@ def stage_additional_info(message):
 
 
 def stage_confirm(message):
-    user = user_sessions.get(message.from_user.id)
+    user = user_sessions[message.from_user.id]
     bot_message = user.big_prompt_message
-    bot_message = bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message.id,
+    bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message.id,
                                         text=mt.dong_creation_main_prompt(prompt="فرستاده شد.", step=5,
                                                                           dong_name=user.dong.name,
                                                                           amount=user.dong.amount,

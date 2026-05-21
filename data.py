@@ -2,16 +2,16 @@ import telebot.types
 
 
 class Dong :
-    id : int
+    id : str
     name : str
     amount : int
     participants : list
     additional_info : str
     big_prompt_message : telebot.types.Message
     group_id : int
-    def __init__(self, id = None, name = None, amount = None, participants =None, additional_info = None , big_prompt_message = None , group_id = None):
+    def __init__(self, dong_id = None, name = None, amount = None, participants =None, additional_info = None, big_prompt_message = None, group_id = None):
         super().__init__()
-        self.id = id
+        self.id = dong_id
         self.name = name
         self.amount = amount
         self.participants = participants
