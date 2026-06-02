@@ -30,9 +30,9 @@ def send_bot_guid_to_gap(message):
 def github_info_handler(message):
     bot.reply_to(message , mt.github_info_message())
 
-@bot.message_handler(func=lambda message : message.text == "ربات در تلگرام ✈️")
-def telegram_bot_id_handler(message):
-    bot.reply_to(message , mt.telegram_info_message())
+@bot.message_handler(func=lambda message : message.text == "ربات در بله ✈️")
+def bale_bot_id_handler(message):
+    bot.reply_to(message , mt.bale_info_message())
 
 @bot.message_handler(func=lambda message : message.text == "سازنده کیه؟ 👨‍💻")
 def developer_info_handler(message):
@@ -42,7 +42,7 @@ def developer_info_handler(message):
 def bot_info_handler(message):
     bot.reply_to(message , mt.bot_info_message())
 
-@bot.message_handler(func=lambda message : message.text == "دونیت ☕")
+@bot.message_handler(func=lambda message : message.text == "دونیت☕")
 def donate_info_handler(message):
     bot.reply_to(message , mt.donate_info_message())
 
