@@ -1,5 +1,5 @@
 from telebot.types import KeyboardButton , ReplyKeyboardMarkup , InlineKeyboardButton, InlineKeyboardMarkup
-
+from bot_instance import BOT_TELEGRAM_DEEP_LINK
 # ----------
 # MAIN KEYBOARD
 # ----------
@@ -32,4 +32,4 @@ dong_set_up = InlineKeyboardMarkup(
             [[InlineKeyboardButton(text="ایجاد دنگ جدید",
 
                                    callback_data="set_up_new_dong")],
-             [InlineKeyboardButton(text="ربات رو استارت بزن", url="https://ble.ir/dong_yar_bot?start=")]])
+             [InlineKeyboardButton(text="ربات رو استارت بزن", url=BOT_TELEGRAM_DEEP_LINK)]])
