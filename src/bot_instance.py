@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from telebot import apihelper
+#from telebot import apihelper
 import telebot
 
 load_dotenv()

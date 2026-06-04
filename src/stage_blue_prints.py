@@ -6,6 +6,7 @@ user_sessions = {}
 
 
 def stage_begin(message , group_id):
+    print("begin")
     user = User(dong=Dong())
     user.messanger_id = message.from_user.id
     user.dong.id = "dong_" + str(user.messanger_id)
