@@ -1,3 +1,5 @@
+import pprint
+
 import bot_instance, data, message_template as mt
 from data import Dong, User
 
@@ -83,5 +85,8 @@ def stage_confirm(message):
                                                                           participants=user.dong.participants,
                                                                           info=user.dong.additional_info))
     data.user_list.append(user)
-    print(data.user_list)
+    # print(data.user_list)
+    # pprint.pp(data.user_list.__dict__)
+    for i in data.user_list:
+        pprint.pp(i.__dict__)
     del user_sessions[message.from_user.id]
