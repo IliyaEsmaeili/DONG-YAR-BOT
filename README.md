@@ -15,12 +15,13 @@
 **Currently implemented:**
 - Responds to group triggers (like "دنگ").
 - Basic setup and inline keyboard routing.
+- interact with user to create a Dong
 
 **Planned / In Development:**
-- 📝 **Set Mother-Spender (Madar Kharj):** Enter card details, total amount, and specific payers.
 - 🎭 **Custom Tones:** The bot will remind users to pay in different personas (Friendly, Strict, Literary, etc.).
 - 🧾 **Receipt Verification:** Users send their payment receipts, and the bot updates the remaining balance.
 - 📊 **Status Reports:** See exactly who has paid, who hasn't, and how much money is collected.
+- postgresql db connection
 
 ---
 
