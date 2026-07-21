@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE dongs (
+CREATE TABLE IF NOT EXISTS dongs (
     id SERIAL PRIMARY KEY ,
     name TEXT  ,
     amount INTEGER ,
