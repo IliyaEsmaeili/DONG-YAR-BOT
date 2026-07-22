@@ -9,11 +9,25 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS dongs (
     id SERIAL PRIMARY KEY ,
     name TEXT  ,
-    amount INTEGER ,
-    participants TEXT ,
+    amount INTEGER CHECK (amount > 0),
     additional_info TEXT ,
     big_prompt_message TEXT ,
-    group_id BIGINT UNIQUE NOT NULL ,
-    creator_id INTEGER
-                   REFERENCES users(id)
+    group_id BIGINT NOT NULL ,
+    creator_id INTEGER NOT NULL
+                   REFERENCES users(id) ,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS dong_participants(
+    id SERIAL PRIMARY KEY ,
+
+    dong_id INTEGER NOT NULL
+                    REFERENCES dongs(id)
+                    ON DELETE CASCADE ,
+    user_id INTEGER NOT NULL
+                    REFERENCES users(id)
+                    ON DELETE CASCADE ,
+
+    UNIQUE(user_id , dong_id)
+);
+
