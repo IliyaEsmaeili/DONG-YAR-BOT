@@ -5,7 +5,6 @@ import dong_handler as dong
 import keyboards
 from telebot.async_telebot import AsyncTeleBot
 import asyncio
-
 from data import User
 from database.repositories import save_user
 bot = bot_instance.bot
@@ -16,8 +15,10 @@ bot = bot_instance.bot
 @bot.message_handler(commands=['start'])
 async def send_welcome(message):
     if message.chat.type == "group": return #Avoid Sending message in groups
+
     user = User(telegram_id=message.from_user.id , full_name=message.from_user.full_name)
     save_user(user)
+
     await bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
     await bot.send_message(message.chat.id, text= mt.welcome_menu_on_start(), reply_markup=keyboards.start_inline)
 
