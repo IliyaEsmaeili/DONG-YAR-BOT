@@ -10,7 +10,7 @@ import stage_blue_prints as stages
 # ----------
 # UNIVERSAL STATE HANDLE IN PV
 # ----------
-@bot.message_handler(func=lambda message : message.chat.type != "group")
-async def send1(message):
-    if message.text == "hi":
-        await bot.reply_to(message, "1")
+# @bot.message_handler(func=lambda message : message.chat.type != "group")
+# async def send1(message):
+#     if message.text == "hi":
+#         await bot.reply_to(message, "1")

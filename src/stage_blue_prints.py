@@ -89,4 +89,4 @@ async def stage_confirm(message):
     # pprint.pp(data.user_list.__dict__)
     for i in data.user_list:
         pprint.pp(i.__dict__)
-    del user_sessions[message.from_user.id]
+

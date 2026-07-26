@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY ,
     telegram_id BIGINT UNIQUE NOT NULL ,
     full_name TEXT ,
-    state TEXT NOT NULL ,
+    state TEXT  ,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

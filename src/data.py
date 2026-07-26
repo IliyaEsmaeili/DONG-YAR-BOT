@@ -39,9 +39,9 @@ class User :
     full_name : str
     dong : list[Dong]
     state : UserState
-    def __init__(self , messanger_id = None , dong = None , full_name = None , state = UserState.STAGE_BEGIN) :
+    def __init__(self , telegram_id = None , dong = None , full_name = None , state = UserState.STAGE_BEGIN) :
         super().__init__()
-        self.telegram_id = messanger_id
+        self.telegram_id = telegram_id
         self.dong = dong
         self.full_name = full_name
         self.state = state
