@@ -4,13 +4,6 @@ from database.repositories import fetch_one
 import stage_blue_prints as stages
 from src.data import User
 
-def user_state_fetch(message):
-    user = message.from_user
-    telegram_id = user.id
-    str_telegram_id = str(telegram_id)
-    fetch_result = fetch_one("""SELECT * FROM users WHERE telegram_id = %s
-    """ , (str_telegram_id , ))
-    return fetch_result[3]
 
 
 async def set_up_dong(call_back):

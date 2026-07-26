@@ -19,3 +19,10 @@ def save_user(user):
             (%s,%s)
         """ , (user.telegram_id , user.full_name))
 
+def user_state_fetch(message):
+    user = message.from_user
+    telegram_id = user.id
+    str_telegram_id = str(telegram_id)
+    fetch_result = fetch_one("""SELECT * FROM users WHERE telegram_id = %s
+    """ , (str_telegram_id , ))
+    return fetch_result[3]
