@@ -26,3 +26,10 @@ def user_state_fetch(message):
     fetch_result = fetch_one("""SELECT * FROM users WHERE telegram_id = %s
     """ , (str_telegram_id , ))
     return fetch_result[3]
+
+def change_user_state(user, state) :
+    telegram_id = user.id
+    str_telegram_id = str(telegram_id)
+    with conn.cursor() as cursor :
+        cursor.execute("""UPDATE users SET state = %s WHERE telegram_id = %s 
+        """ , (state , str_telegram_id))

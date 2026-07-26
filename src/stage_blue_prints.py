@@ -2,11 +2,11 @@ import pprint
 
 import bot_instance, data, message_template as mt
 from data import Dong, User
-
+from database.repositories import user_state_fetch , change_user_state
 bot = bot_instance.bot  # to be more clear where bot came from
 user_sessions = {}
 
-
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_begin" and message.chat.type == "private")
 async def stage_begin(message , group_id):
     print("begin")
     user = User(dong=Dong())
@@ -17,9 +17,10 @@ async def stage_begin(message , group_id):
                                          mt.dong_creation_main_prompt(prompt=mt.stage_name_prompt(), step=0))
     user.big_prompt_message = bot_message
     user_sessions[user.telegram_id] = user
-    await bot.register_next_step_handler(bot_message, stage_name)
+    change_user_state(message.from_user , "stage_name")
 
 
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_name")
 async def stage_name(message):
     user = user_sessions[message.from_user.id]
     user.dong.name = message.text
@@ -28,9 +29,10 @@ async def stage_name(message):
                                               text=mt.dong_creation_main_prompt(prompt=mt.stage_amount_prompt(), step=1,
                                                             dong_name=user.dong.name))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    await bot.register_next_step_handler(bot_message, stage_amount)
+    change_user_state(message.from_user , "stage_amount")
 
 
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_amount"and message.chat.type == "private")
 async def stage_amount(message):
     user = user_sessions[message.from_user.id]
     user.dong.amount = message.text
@@ -39,9 +41,10 @@ async def stage_amount(message):
                                               text=mt.dong_creation_main_prompt(prompt=mt.stage_participants_prompt(), step=2,
                                                             dong_name=user.dong.name ,amount=user.dong.amount ))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    await bot.register_next_step_handler(bot_message, stage_participants)
+    change_user_state(message.from_user , "stage_participants")
 
 
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_participants"and message.chat.type == "private")
 async def stage_participants(message):
     user = user_sessions[message.from_user.id]
     participants = message.text.split(" ")
@@ -53,9 +56,10 @@ async def stage_participants(message):
                                                                           dong_name=user.dong.name,
                                                                           amount=user.dong.amount , participants=user.dong.participants))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    await bot.register_next_step_handler(bot_message, stage_additional_info)
+    change_user_state(message.from_user , "stage_particistage_additional_infopants")
 
 
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_additional_info"and message.chat.type == "private")
 async def stage_additional_info(message):
     user = user_sessions[message.from_user.id]
     user.dong.additional_info = message.text
@@ -66,9 +70,10 @@ async def stage_additional_info(message):
                                                                           amount=user.dong.amount,
                                                                           participants=user.dong.participants , info=user.dong.additional_info))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    await bot.register_next_step_handler(bot_message, stage_confirm)
+    change_user_state(message.from_user , "stage_confirm")
 
 
+@bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_confirm"and message.chat.type == "private")
 async def stage_confirm(message):
     user = user_sessions[message.from_user.id]
     bot_message = user.big_prompt_message
