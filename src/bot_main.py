@@ -13,8 +13,8 @@ bot = bot_instance.bot
 @bot.message_handler(commands=['start'])
 async def send_welcome(message):
     if message.chat.type == "group": return #Avoid Sending message in groups
-    await bot.send_message(message.chat.local_dong_id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
-    await bot.send_message(message.chat.local_dong_id, text= mt.welcome_menu_on_start(), reply_markup=keyboards.start_inline)
+    await bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
+    await bot.send_message(message.chat.id, text= mt.welcome_menu_on_start(), reply_markup=keyboards.start_inline)
 
 
 
@@ -22,7 +22,7 @@ async def send_welcome(message):
 async def send_bot_guid_to_gap(message):
     if message.chat.type != "group": return
 
-    await bot.send_photo(chat_id=message.chat.local_dong_id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
+    await bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
                          caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
 
 
@@ -48,17 +48,18 @@ async def donate_info_handler(message):
 
 
 
+
 # ----------
 # CALL BACK HANDLERS
 # ----------
 @bot.callback_query_handler(func=lambda call: call.data == "usage_guide")
 async def handle_show_usage_guide(callback_query):
-    await bot.answer_callback_query(callback_query.local_dong_id)
-    await bot.send_message(chat_id=callback_query.from_user.local_dong_id, text= mt.guide_message())
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(chat_id=callback_query.from_user.id, text= mt.guide_message())
 
 @bot.callback_query_handler(func=lambda call: call.data == "set_up_new_dong")
 async def handle_set_up_new_dong(call_back_query):
-    await bot.answer_callback_query(call_back_query.local_dong_id)
+    await bot.answer_callback_query(call_back_query.id)
     await dong.set_up_dong(call_back=call_back_query)
 
 
