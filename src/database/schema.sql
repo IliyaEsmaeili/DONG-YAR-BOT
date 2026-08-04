@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS dong_participants(
     dong_id BIGINT NOT NULL
                     REFERENCES dongs(id)
                     ON DELETE CASCADE ,
-    user_id BIGINT NOT NULL
+    user_id BIGINT
                     REFERENCES users(telegram_id)
                     ON DELETE CASCADE ,
-
+    user_name TEXT ,
     UNIQUE(user_id , dong_id)
 );
 

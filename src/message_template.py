@@ -1,3 +1,5 @@
+
+
 def welcome_message_on_start():
     return """سلام! ✋ به دنگ‌ یار خوش اومدی! 💸  
       
@@ -26,7 +28,22 @@ def heard_dong():
         """
 
 
-def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" "):
+def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" " , stage = None):
+    if stage is not None :
+        match stage :
+            case "stage_begin" :
+                step = 0
+            case "stage_name":
+                step = 1
+            case "stage_amount":
+                step = 2
+            case "stage_participants":
+                step = 3
+            case "stage_additional_info":
+                step = 4
+            case "stage_confirm":
+                step = 5
+
     # Check if participants is a list, and transform it into a clean layout
     if isinstance(participants, list):
         # This joins each name with a new line and a bullet point emoji

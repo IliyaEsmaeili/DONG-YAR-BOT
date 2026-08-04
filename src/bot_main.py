@@ -9,7 +9,7 @@ from data import User
 from database.repositories import save_user
 bot = bot_instance.bot
 import logging
-# telebot.logger.setLevel(logging.DEBUG)
+telebot.logger.setLevel(logging.DEBUG)
 # ----------
 # MESSAGE HANDLERS
 # ----------
