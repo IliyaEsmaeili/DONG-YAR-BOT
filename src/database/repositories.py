@@ -53,6 +53,11 @@ def get_user_from_telegram_id(telegram_id):
     user.dong = []
     for dong_tuple in dongs :
         dong = Dong(dong_id=dong_tuple[0], name = dong_tuple[1] , amount= dong_tuple[2] , additional_info=dong_tuple[3], big_prompt_message=dong_tuple[4] ,group_id=dong_tuple[5], creator_id=dong_tuple[6] )
+        dongs_participants = fetch_all("""SELECT * FROM dong_participants WHERE dong_id = %s
+        """ , (dong.local_dong_id , ))
+        dong.participants = []
+        for dong_participant in dongs_participants :
+            dong.participants.append(dong_participant[3])
         user.dong.append(dong)
     return user
 
