@@ -25,6 +25,7 @@ def user_state_fetch(message):
     str_telegram_id = str(telegram_id)
     fetch_result = fetch_one("""SELECT * FROM users WHERE telegram_id = %s
     """ , (str_telegram_id , ))
+    if fetch_result is None : return None
     return fetch_result[3]
 
 def change_user_state(user, state) :

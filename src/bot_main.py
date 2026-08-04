@@ -15,8 +15,9 @@ bot = bot_instance.bot
 @bot.message_handler(commands=['start'])
 async def send_welcome(message):
     if message.chat.type == "group": return #Avoid Sending message in groups
-
+    print("start")
     user = User(telegram_id=message.from_user.id , full_name=message.from_user.full_name)
+    print(user)
     save_user(user)
 
     await bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
