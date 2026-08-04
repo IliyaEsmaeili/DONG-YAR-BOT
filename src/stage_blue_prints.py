@@ -58,7 +58,7 @@ async def stage_participants(message):
                                                                           dong_name=user.dong.name,
                                                                           amount=user.dong.amount , participants=user.dong.participants))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    change_user_state(message.from_user , "stage_particistage_additional_infopants")
+    change_user_state(message.from_user , "stage_additional_info")
 
 
 @bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_additional_info"and message.chat.type == "private")
