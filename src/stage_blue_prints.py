@@ -2,12 +2,14 @@ import pprint
 
 import bot_instance, data, message_template as mt
 from data import Dong, User
-from database.repositories import user_state_fetch , change_user_state
+from database.repositories import user_state_fetch , change_user_state , fetch_one
 bot = bot_instance.bot  # to be more clear where bot came from
 user_sessions = {}
 
 @bot.message_handler(func=lambda message : user_state_fetch(message) == "stage_begin" and message.chat.type == "private")
-async def stage_begin(message , group_id):
+async def stage_begin(message):
+    group_id = fetch_one("""SELECT * FROM dongs WHERE creator_id = %s
+    """ , (message.from_user.id, ))
     print("begin")
     user = User(dong=Dong())
     user.telegram_id = message.from_user.id

@@ -19,7 +19,8 @@ class Dong :
     big_prompt_message : telebot.types.Message
     group_id : int
     creator : User
-    def __init__(self, dong_id = None, name = None, amount = None, participants =None, additional_info = None, big_prompt_message = None, group_id = None , creator=None ):
+    creator_id = int
+    def __init__(self, dong_id = None, name = None, amount = None, participants =None, additional_info = None, big_prompt_message = None, group_id = None , creator=None , creator_id = None):
         super().__init__()
         self.local_dong_id = dong_id
         self.name = name
@@ -29,9 +30,9 @@ class Dong :
         self.big_prompt_message = big_prompt_message
         self.group_id = group_id
         self.creator = creator
-
+        self.creator_id = creator_id
     def __repr__(self):
-        return f"Dong(id={self.local_dong_id}, creator = {self.creator} , name={self.name}, amount={self.amount}, participants={self.participants}, additional_info={self.additional_info})"
+        return f"Dong(id={self.local_dong_id}, creator = {self.creator} , creator id = {self.creator_id}  , name={self.name}, amount={self.amount}, participants={self.participants}, additional_info={self.additional_info})"
 
 
 class User :

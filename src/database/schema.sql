@@ -13,19 +13,19 @@ CREATE TABLE IF NOT EXISTS dongs (
     additional_info TEXT ,
     big_prompt_message TEXT ,
     group_id BIGINT NOT NULL ,
-    creator_id INTEGER NOT NULL
-                   REFERENCES users(id) ,
+    creator_id BIGINT NOT NULL
+                   REFERENCES users(telegram_id) ,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS dong_participants(
     id SERIAL PRIMARY KEY ,
 
-    dong_id INTEGER NOT NULL
+    dong_id BIGINT NOT NULL
                     REFERENCES dongs(id)
                     ON DELETE CASCADE ,
-    user_id INTEGER NOT NULL
-                    REFERENCES users(id)
+    user_id BIGINT NOT NULL
+                    REFERENCES users(telegram_id)
                     ON DELETE CASCADE ,
 
     UNIQUE(user_id , dong_id)

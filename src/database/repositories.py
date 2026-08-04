@@ -19,6 +19,12 @@ def save_user(user):
             (%s,%s)
         """ , (user.telegram_id , user.full_name))
 
+def save_dong(dong):
+    with conn.cursor() as cursor :
+        cursor.execute("""INSERT INTO dongs(group_id, creator_id) VALUES
+            (%s,%s)
+        """ , (dong.group_id, dong.creator_id))
+
 def user_state_fetch(message):
     user = message.from_user
     telegram_id = user.id
