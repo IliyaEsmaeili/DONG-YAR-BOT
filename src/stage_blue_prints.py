@@ -26,7 +26,7 @@ async def stage_begin(message):
 @bot.message_handler(func=lambda message: user_state_fetch(message) == "stage_name"and message.chat.type == "private")
 async def stage_name(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
-    # user.dong[-1].name = message.text
+    user.dong[-1].name = message.text
     execute_query("""UPDATE dongs
                      SET name = %s
                      WHERE id = %s
@@ -44,7 +44,7 @@ async def stage_name(message):
     func=lambda message: user_state_fetch(message) == "stage_amount" and message.chat.type == "private")
 async def stage_amount(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
-    # user.dong[-1].amount = message.text
+    user.dong[-1].amount = message.text
     execute_query("""UPDATE dongs
                      SET amount = %s
                      WHERE id = %s
@@ -64,7 +64,7 @@ async def stage_amount(message):
 async def stage_participants(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     participants = message.text.split(" ")
-    # user.dong[-1].participants = participants
+    user.dong[-1].participants = participants
     for participant in participants :
         execute_query("""INSERT INTO dong_participants(dong_id, user_name) VALUES (%s , %s)
         """,(user.dong[-1].local_dong_id , participant))
@@ -84,12 +84,15 @@ async def stage_participants(message):
     func=lambda message: user_state_fetch(message) == "stage_additional_info" and message.chat.type == "private")
 async def stage_additional_info(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
-    # user.dong[-1].additional_info = message.text
+    user.dong[-1].additional_info = message.text
+
     execute_query("""UPDATE dongs
                      SET additional_info = %s
                      WHERE id = %s
                   """, (message.text, user.dong[-1].local_dong_id))
     bot_message_id = user.dong[-1].big_prompt_message
+
+
     await bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message_id,
                                               text=mt.dong_creation_main_prompt(prompt=mt.stage_confirm_prompt(),
                                                                                 step=4,
