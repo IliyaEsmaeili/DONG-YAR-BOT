@@ -75,7 +75,54 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
 
 
     """
+def dong_summary_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None) :
+    if stage is not None :
+        match stage :
+            case "stage_begin" :
+                step = 0
+            case "stage_name":
+                step = 1
+            case "stage_amount":
+                step = 2
+            case "stage_participants":
+                step = 3
+            case "stage_additional_info":
+                step = 4
+            case "stage_confirm":
+                step = 5
 
+    # Check if participants is a list, and transform it into a clean layout
+    if isinstance(participants, list):
+        # This joins each name with a new line and a bullet point emoji
+        participants_text = "\n".join([f"  🔸 {p}" for p in participants])
+    else:
+        participants_text = participants
+
+    return f"""💸دنگ جدید از راه رسید
+
+━━━━━━━━━━━━━━━━
+💳مادر خرج
+[{creator_name}](tg://user?id={creator_id})
+📍 عنوان خرج
+{dong_name} 
+
+💰 مبلغ کل
+{amount}
+
+👥 افراد شریک
+{participants_text}
+
+📝 توضیحات
+{info}
+
+━━━━━━━━━━━━━━━━
+
+
+
+{prompt}
+
+
+    """
 
 def stage_name_prompt():
     name_prompt = """بزن بریم یه دنگ جدید درست کنیم 💸
