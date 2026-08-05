@@ -122,5 +122,5 @@ async def stage_confirm(message):
                                                                                          participants=user.dong[
                                                                                              -1].participants,
                                                                                          info=user.dong[
-                                                                                             -1].additional_info , creator_name=user.full_name , creator_id=user.telegram_id) , parse_mode="MarkdownV2")
+                                                                                             -1].additional_info , creator_name=user.full_name , creator_id=user.telegram_id) , parse_mode="HTML")
     await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)

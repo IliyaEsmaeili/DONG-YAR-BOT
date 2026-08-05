@@ -75,7 +75,7 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
 
 
     """
-def dong_summary_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None) :
+def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None ) :
     if stage is not None :
         match stage :
             case "stage_begin" :
@@ -102,7 +102,7 @@ def dong_summary_main_prompt(dong_name="-", amount="-", participants="-", info="
 
 ━━━━━━━━━━━━━━━━
 💳مادر خرج
-[{creator_name}](tg://user?id={creator_id})
+<a href="tg://user?id={creator_id}">{creator_name}</a>
 📍 عنوان خرج
 {dong_name} 
 
@@ -112,6 +112,8 @@ def dong_summary_main_prompt(dong_name="-", amount="-", participants="-", info="
 👥 افراد شریک
 {participants_text}
 
+💰 بدهی هر نفر
+{amount / len(participants) if participants else "err"}
 📝 توضیحات
 {info}
 
