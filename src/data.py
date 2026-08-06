@@ -9,6 +9,7 @@ class UserState(Enum):
     STAGE_PARTICIPANTS = "stage_participants"
     STAGE_ADDITIONAL_INFO = "stage_additional_info"
     STAGE_CONFIRM = "stage_confirm"
+    STAGE_IDLE = "stage_idle"
 
 class Dong :
     local_dong_id : str
