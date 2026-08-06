@@ -7,12 +7,16 @@ def execute_query( query , params ) :
 def fetch_one(query , params) :
     with conn.cursor() as cursor :
         cursor.execute(query , params)
-        return cursor.fetchone()
+        fetch_data = cursor.fetchone()
+        if fetch_data is None : return None
+        return fetch_data
 
 def fetch_all(query , params) :
     with conn.cursor() as cursor :
         cursor.execute(query , params)
-        return cursor.fetchall()
+        fetch_data = cursor.fetchall()
+        if fetch_data is None: return None
+        return fetch_data
 
 def save_user(user):
     with conn.cursor() as cursor :
@@ -46,6 +50,7 @@ def get_user_from_telegram_id(telegram_id):
     data = fetch_one("""SELECT * FROM users WHERE telegram_id = %s
     """ , (telegram_id , ))
     print("data = " , data)
+    if data is None : return None
     user = User(telegram_id = telegram_id , full_name=data[2] , state=data[3])
 
     dongs= fetch_all("""SELECT * FROM dongs WHERE creator_id = %s 
