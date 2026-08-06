@@ -1,3 +1,5 @@
+import asyncio
+
 import bot_instance, data, message_template as mt
 from database.repositories import user_state_fetch, change_user_state, fetch_one, get_user_from_telegram_id, \
     execute_query
@@ -46,6 +48,16 @@ async def stage_name(message, user):
 
 async def stage_amount(message, user):
     user.dong[-1].amount = message.text
+    amount = None
+    try :
+        amount = int(message.text)
+        print(amount)
+    except ValueError:
+        sent_temp = await bot.send_message(chat_id=message.from_user.id , text= "لطفا عدد رو به صورت انگلیسی و 'هزار تومان' وارد کنید.")
+        await asyncio.sleep(3)
+        await bot.delete_message(chat_id=message.from_user.id , message_id=sent_temp.id)
+        await bot.delete_message(chat_id=message.from_user.id, message_id=message.id)
+        return
     execute_query("""UPDATE dongs
                      SET amount = %s
                      WHERE id = %s
