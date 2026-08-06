@@ -18,6 +18,7 @@ def welcome_message_on_group_new_dong(group_name):
     
     شما در حال ساخت دنگ جدید در گروه {group_name} هستید.
     
+    در صورت تایید کلمه شروع را ارسال کنید:
 """
 
 
@@ -113,7 +114,7 @@ def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info
 {participants_text}
 
 💰 بدهی هر نفر
-{amount / len(participants) if participants else "err"}
+{int(amount / len(participants)) if participants else "err"}
 📝 توضیحات
 {info}
 
@@ -136,7 +137,7 @@ def stage_name_prompt():
 
 def stage_amount_prompt():
     return """مبلغ کل این خرج چقدر بوده؟ 💰
-لطفاً فقط عدد رو و به تومان وارد کن .
+لطفاً فقط عدد رو و به هزار تومان وارد کن .
 مثلاً: 850000
     """
 
@@ -158,6 +159,8 @@ def stage_additional_info_prompt():
 def stage_confirm_prompt():
     return """لطفاً اطلاعات واردشده را بررسی کن.
 در صورت تأیید، دنگ در گروه ارسال خواهد شد ✅
+
+در صورت تایید، کلمه 'تایید' را ارسال کنید:
 """
 
 
