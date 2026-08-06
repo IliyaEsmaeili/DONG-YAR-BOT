@@ -7,17 +7,16 @@ bot = bot_instance.bot
 @bot.message_handler(func=lambda message : message.chat.type == "private")
 async def dong_creation_router(message):
     stage = user_state_fetch(message)
-    match stage :
-        case "stage_begin" : await stage_begin(message)
-        case "stage_name" : await stage_name(message)
-        case "stage_amount" : await stage_amount(message)
-        case "stage_participants" : await stage_participants(message)
-        case "stage_additional_info" : await stage_additional_info(message)
-        case "stage_confirm" : await (stage_confirm(message))
-
-async def stage_begin(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+    match stage :
+        case "stage_begin" : await stage_begin(message , user)
+        case "stage_name" : await stage_name(message, user)
+        case "stage_amount" : await stage_amount(message, user)
+        case "stage_participants" : await stage_participants(message, user)
+        case "stage_additional_info" : await stage_additional_info(message, user)
+        case "stage_confirm" : await stage_confirm(message, user)
 
+async def stage_begin(message , user):
     bot_message = await bot.send_message(message.from_user.id,
                                          mt.dong_creation_main_prompt(prompt=mt.stage_name_prompt(), step=0))
 
@@ -29,9 +28,7 @@ async def stage_begin(message):
     change_user_state(message.from_user, "stage_name")
 
 
-
-async def stage_name(message):
-    user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+async def stage_name(message, user):
     user.dong[-1].name = message.text
     execute_query("""UPDATE dongs
                      SET name = %s
@@ -47,8 +44,7 @@ async def stage_name(message):
 
 
 
-async def stage_amount(message):
-    user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+async def stage_amount(message, user):
     user.dong[-1].amount = message.text
     execute_query("""UPDATE dongs
                      SET amount = %s
@@ -65,8 +61,7 @@ async def stage_amount(message):
 
 
 
-async def stage_participants(message):
-    user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+async def stage_participants(message, user):
     participants = message.text.split(" ")
     user.dong[-1].participants = participants
     for participant in participants :
@@ -85,8 +80,7 @@ async def stage_participants(message):
 
 
 
-async def stage_additional_info(message):
-    user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+async def stage_additional_info(message, user):
     user.dong[-1].additional_info = message.text
 
     execute_query("""UPDATE dongs
@@ -108,8 +102,7 @@ async def stage_additional_info(message):
 
 
 
-async def stage_confirm(message):
-    user = get_user_from_telegram_id(telegram_id=message.from_user.id)
+async def stage_confirm(message, user):
     bot_message_id = user.dong[-1].big_prompt_message
     await bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message_id,
                                 text=mt.dong_creation_main_prompt(prompt="فرستاده شد.", step=5,
