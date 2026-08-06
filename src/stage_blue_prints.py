@@ -1,14 +1,20 @@
-import pprint
-
 import bot_instance, data, message_template as mt
-from data import Dong, User
 from database.repositories import user_state_fetch, change_user_state, fetch_one, get_user_from_telegram_id, \
     execute_query
+bot = bot_instance.bot
 
-bot = bot_instance.bot  # to be more clear where bot came from
 
+@bot.message_handler(func=lambda message : message.chat.type == "private")
+async def dong_creation_router(message):
+    stage = user_state_fetch(message)
+    match stage :
+        case "stage_begin" : await stage_begin(message)
+        case "stage_name" : await stage_name(message)
+        case "stage_amount" : await stage_amount(message)
+        case "stage_participants" : await stage_participants(message)
+        case "stage_additional_info" : await stage_additional_info(message)
+        case "stage_confirm" : await (stage_confirm(message))
 
-@bot.message_handler(func=lambda message: user_state_fetch(message) == "stage_begin" and message.chat.type == "private")
 async def stage_begin(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
 
@@ -23,7 +29,7 @@ async def stage_begin(message):
     change_user_state(message.from_user, "stage_name")
 
 
-@bot.message_handler(func=lambda message: user_state_fetch(message) == "stage_name"and message.chat.type == "private")
+
 async def stage_name(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     user.dong[-1].name = message.text
@@ -40,8 +46,7 @@ async def stage_name(message):
     change_user_state(message.from_user, "stage_amount")
 
 
-@bot.message_handler(
-    func=lambda message: user_state_fetch(message) == "stage_amount" and message.chat.type == "private")
+
 async def stage_amount(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     user.dong[-1].amount = message.text
@@ -59,8 +64,7 @@ async def stage_amount(message):
     change_user_state(message.from_user, "stage_participants")
 
 
-@bot.message_handler(
-    func=lambda message: user_state_fetch(message) == "stage_participants" and message.chat.type == "private")
+
 async def stage_participants(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     participants = message.text.split(" ")
@@ -80,8 +84,7 @@ async def stage_participants(message):
     change_user_state(message.from_user, "stage_additional_info")
 
 
-@bot.message_handler(
-    func=lambda message: user_state_fetch(message) == "stage_additional_info" and message.chat.type == "private")
+
 async def stage_additional_info(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     user.dong[-1].additional_info = message.text
@@ -104,8 +107,7 @@ async def stage_additional_info(message):
     change_user_state(message.from_user, "stage_confirm")
 
 
-@bot.message_handler(
-    func=lambda message: user_state_fetch(message) == "stage_confirm" and message.chat.type == "private")
+
 async def stage_confirm(message):
     user = get_user_from_telegram_id(telegram_id=message.from_user.id)
     bot_message_id = user.dong[-1].big_prompt_message
