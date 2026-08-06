@@ -141,6 +141,8 @@ def stage_amount_prompt():
 مثلاً: 850000
     """
 
+def stage_amount_validation_prompt():
+    return "لطفا عدد رو به صورت انگلیسی و 'هزار تومان' وارد کنید."
 
 def stage_participants_prompt():
     return """چه کسانی توی این دنگ شریکن؟ 👥

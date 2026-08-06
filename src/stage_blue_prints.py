@@ -53,7 +53,7 @@ async def stage_amount(message, user):
         amount = int(message.text)
         print(amount)
     except ValueError:
-        sent_temp = await bot.send_message(chat_id=message.from_user.id , text= "لطفا عدد رو به صورت انگلیسی و 'هزار تومان' وارد کنید.")
+        sent_temp = await bot.send_message(chat_id=message.from_user.id , text= mt.stage_amount_validation_prompt())
         await asyncio.sleep(3)
         await bot.delete_message(chat_id=message.from_user.id , message_id=sent_temp.id)
         await bot.delete_message(chat_id=message.from_user.id, message_id=message.id)
