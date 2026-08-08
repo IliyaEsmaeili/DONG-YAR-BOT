@@ -19,7 +19,7 @@ telebot.logger.setLevel(logging.DEBUG)
 # ----------
 @bot.message_handler(commands=['start'])
 async def send_welcome(message):
-    if message.chat.type == "group": return #Avoid Sending message in groups
+    if message.chat.type in ("group" , "supergroup"): return #Avoid Sending message in groups
     print("start")
     user = User(telegram_id=message.from_user.id , full_name=message.from_user.full_name)
     print(user)
