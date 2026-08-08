@@ -32,7 +32,7 @@ async def send_welcome(message):
 
 @bot.message_handler(regexp="دنگ")
 async def send_bot_guid_to_gap(message):
-    if message.chat.type != "group" or message.chat.type != "supergroup": return
+    if message.chat.type not in ("group" , "supergroup") : return
 
     await bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
                          caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)

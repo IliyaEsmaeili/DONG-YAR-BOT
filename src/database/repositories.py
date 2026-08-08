@@ -27,6 +27,7 @@ async def save_user(user):
             INSERT INTO users
             (telegram_id, full_name)
             VALUES ($1, $2)
+                ON CONFLICT DO NOTHING
             """,
             user.telegram_id,
             user.full_name
