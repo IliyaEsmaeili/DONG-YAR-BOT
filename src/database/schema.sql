@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS dongs (
     name TEXT  ,
     amount INTEGER CHECK (amount > 0),
     additional_info TEXT ,
-    big_prompt_message TEXT ,
+    big_prompt_message BIGINT ,
     group_id BIGINT NOT NULL ,
     creator_id BIGINT NOT NULL
                    REFERENCES users(telegram_id) ,
