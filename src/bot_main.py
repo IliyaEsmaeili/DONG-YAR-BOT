@@ -11,7 +11,13 @@ bot = bot_instance.bot
 import logging
 telebot.logger.setLevel(logging.DEBUG)
 
+# ----------
+#SMALL STORAGE TO KEEP SOME FILE IDS
+# ----------
+asset_file_ids_cache = {
 
+}
+asset_file_ids_cache_lock = asyncio.Lock()
 
 # ----------
 # MESSAGE HANDLERS
@@ -33,8 +39,16 @@ async def send_welcome(message):
 async def send_bot_guid_to_gap(message):
     if message.chat.type not in ("group" , "supergroup") : return
 
-    await bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
+
+    if "heard_dong_asset" not in asset_file_ids_cache :
+        sent_message = await  bot.send_photo(chat_id=message.chat.id, photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
                          caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
+        async with asset_file_ids_cache_lock:
+            asset_file_ids_cache["heard_dong_asset"] = sent_message.photo[-1].file_id
+    else:
+        await bot.send_photo(chat_id=message.chat.id,
+                             photo=asset_file_ids_cache["heard_dong_asset"] ,
+                             caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
 
 
 @bot.message_handler(func=lambda message : message.text == "گیت‌هاب 💻")
