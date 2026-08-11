@@ -133,4 +133,6 @@ async def stage_confirm(message, user):
                                                                                          info=user.dong[
                                                                                              -1].additional_info , creator_name=user.full_name , creator_id=user.telegram_id) , parse_mode="HTML")
     await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
+    await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2
+    """ , sent.id , user.dong[-1].local_dong_id)
     await change_user_state(message.from_user, "stage_idle")

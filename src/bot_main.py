@@ -54,7 +54,7 @@ async def send_bot_guid_to_gap(message):
 # ----------
 # receipt check
 # ----------
-@bot.message_handler(lambda message : message.reply_to_message == True and message.reply_to_message.id)
+#@bot.message_handler(lambda message : message.reply_to_message == True and message.reply_to_message.id)
 
 # ----------
 # KEYBOARD BUTTONS

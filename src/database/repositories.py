@@ -41,11 +41,12 @@ async def save_dong(dong):
         await conn.execute(
             """
             INSERT INTO dongs
-            (group_id, creator_id)
-            VALUES ($1, $2)
+            (group_id, creator_id ,group_name)
+            VALUES ($1, $2 , $3)
             """,
             dong.group_id,
-            dong.creator_id
+            dong.creator_id,
+            dong.group_name
         )
 
 async def user_state_fetch(message):
