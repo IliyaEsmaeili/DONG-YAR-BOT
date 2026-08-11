@@ -10,6 +10,8 @@ bot = bot_instance.bot
 async def dong_creation_router(message):
     stage = await user_state_fetch(message)
     user = await get_user_from_telegram_id(telegram_id=message.from_user.id)
+    if user is None :
+        raise ValueError("USER IS NONE AND TRYING TO USE THE ROUTER TO CREATE A DONG!")
     match stage :
         case "stage_begin" : await stage_begin(message , user)
         case "stage_name" : await stage_name(message, user)
