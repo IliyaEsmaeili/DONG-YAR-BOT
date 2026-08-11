@@ -3,7 +3,6 @@ import bot_instance
 import message_template as mt
 import dong_handler as dong
 import keyboards
-from telebot.async_telebot import AsyncTeleBot
 import asyncio
 from data import User
 from database.connection import create_pool
@@ -78,6 +77,8 @@ async def start_db_and_bot():
     await create_pool()
     await bot.infinity_polling()
 
+# ----------
+# STAGES
+# ----------
+import stage_blue_prints
 asyncio.run(start_db_and_bot())
-# bot.infinity_polling()
-# asyncio.run(bot.polling())
