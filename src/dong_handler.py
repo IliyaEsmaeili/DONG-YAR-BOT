@@ -1,7 +1,6 @@
 import message_template as mt
 from bot_instance import bot
 from database.repositories import change_user_state , save_dong
-import stage_blue_prints as stages
 from src.data import Dong
 
 
