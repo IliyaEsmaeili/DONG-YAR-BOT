@@ -6,7 +6,7 @@ from database.repositories import user_state_fetch, change_user_state, fetch_one
 bot = bot_instance.bot
 
 
-@bot.message_handler(func=lambda message : message.chat.type == "private" and message.text != "/start" )
+@bot.message_handler(func=lambda message : message.chat.type == "private" and message.text not in ("/start" , "/cancel" ))
 async def dong_creation_router(message):
     stage = await user_state_fetch(message)
     user = await get_user_from_telegram_id(telegram_id=message.from_user.id)
