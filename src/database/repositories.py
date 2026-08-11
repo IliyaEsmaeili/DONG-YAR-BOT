@@ -27,7 +27,8 @@ async def save_user(user):
             INSERT INTO users
             (telegram_id, full_name)
             VALUES ($1, $2)
-                ON CONFLICT DO NOTHING
+                ON CONFLICT(telegram_id) 
+                    DO UPDATE SET full_name = EXCLUDED.full_name 
             """,
             user.telegram_id,
             user.full_name

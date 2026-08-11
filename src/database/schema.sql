@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS dongs (
     group_id BIGINT NOT NULL ,
     creator_id BIGINT NOT NULL
                    REFERENCES users(telegram_id) ,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    created_at TIMESTAMP NOT NULL DEFAULT NOW() ,
+    group_name TEXT ,
+    last_pinned_message_id BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS dong_participants(

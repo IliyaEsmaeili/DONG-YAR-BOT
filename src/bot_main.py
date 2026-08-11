@@ -51,6 +51,14 @@ async def send_bot_guid_to_gap(message):
                              caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
 
 
+# ----------
+# receipt check
+# ----------
+@bot.message_handler(lambda message : message.reply_to_message == True and message.reply_to_message.id)
+
+# ----------
+# KEYBOARD BUTTONS
+# ----------
 @bot.message_handler(func=lambda message : message.text == "گیت‌هاب 💻")
 async def github_info_handler(message):
     await bot.reply_to(message , mt.github_info_message())
@@ -95,4 +103,6 @@ async def start_db_and_bot():
 # STAGES
 # ----------
 import stage_blue_prints
+
+
 asyncio.run(start_db_and_bot())
