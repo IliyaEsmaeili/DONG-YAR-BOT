@@ -12,3 +12,6 @@ if TELEGRAM_TOKEN is None:
     raise ValueError("TELEGRAM_BOT_TOKEN is missing! Check your .env file.")
 
 bot = AsyncTeleBot(TELEGRAM_TOKEN)
+
+async def get_bot_info() :
+    return await bot.get_me()

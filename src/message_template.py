@@ -46,9 +46,7 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
             case "stage_confirm":
                 step = 5
 
-    # Check if participants is a list, and transform it into a clean layout
     if isinstance(participants, list):
-        # This joins each name with a new line and a bullet point emoji
         participants_text = "\n".join([f"  🔸 {p}" for p in participants])
     else:
         participants_text = participants
@@ -269,3 +267,28 @@ def donate_info_message():
 
 🔗 لینک حمایت مالی (دونیت):
 https://reymit.ir/iliya_esmaeili"""
+
+
+def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_full_name, receipt_sender_user_name, receipt_sender_id, participants_list, group_name) :
+    if isinstance(participants_list, list):
+        participants_text = "\n".join([f"  🔸 {p}" for p in participants_list])
+    else:
+        participants_text = participants_list
+
+    return f"""💳 رسید جدید برای تأیید دنگ
+
+🏷 نام دنگ: {dong_name} 
+در گروه :‌{group_name}
+💰 مبلغ سهم هر نفر: {amount_per_person} تومان
+👤 ارسال‌کننده رسید: {receipt_sender_full_name if receipt_sender_full_name else "یافت نشد"}
+@{receipt_sender_user_name if receipt_sender_user_name else "@ not found"}
+🆔 شناسه کاربر: {receipt_sender_id}
+
+👥 شرکت‌کنندگان دنگ:
+{participants_text}
+
+━━━━━━━━━━━━━━
+
+لطفاً مشخص کنید این پرداخت مربوط به کدام شرکت‌کننده است.
+
+⚠️ پس از تأیید، وضعیت پرداخت فرد انتخاب‌شده در گروه اعلام خواهد شد."""

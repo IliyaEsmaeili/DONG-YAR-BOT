@@ -6,7 +6,8 @@ import keyboards
 import asyncio
 from data import User
 from database.connection import create_pool
-from database.repositories import save_user
+from database.repositories import save_user, fetch_one, fetch_all
+
 bot = bot_instance.bot
 import logging
 telebot.logger.setLevel(logging.DEBUG)
@@ -15,9 +16,10 @@ telebot.logger.setLevel(logging.DEBUG)
 #SMALL STORAGE TO KEEP SOME FILE IDS
 # ----------
 asset_file_ids_cache = {
-
 }
 asset_file_ids_cache_lock = asyncio.Lock()
+bot_info = None
+
 
 # ----------
 # MESSAGE HANDLERS
@@ -35,7 +37,7 @@ async def send_welcome(message):
 
 
 
-@bot.message_handler(regexp="دنگ")
+@bot.message_handler(regexp=r"^دنگ$")
 async def send_bot_guid_to_gap(message):
     if message.chat.type not in ("group" , "supergroup") : return
 
@@ -54,7 +56,39 @@ async def send_bot_guid_to_gap(message):
 # ----------
 # receipt check
 # ----------
-#@bot.message_handler(lambda message : message.reply_to_message == True and message.reply_to_message.id)
+import pprint
+
+
+@bot.message_handler(func=lambda
+        message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id and any(
+    word in message.text for word in ["پرداخت دنگ"]))
+@bot.message_handler(content_types=['photo', 'document'], func=lambda
+        message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id)
+async def reply_to_send_receipt_handler(message):
+    fetch_dong_and_creator = await fetch_one("""SELECT d.id, d.name, d.amount, d.creator_id, u.full_name , d.group_id , d.group_name
+                                                FROM dongs d
+                                                         JOIN users u ON u.telegram_id = d.creator_id
+                                                WHERE group_id = $1
+                                                  AND last_pinned_message_id = $2
+                                             """, message.chat.id, message.reply_to_message.message_id)
+
+    fetch_dongs_participants = await fetch_all("""SELECT *
+                                                  FROM dong_participants
+                                                  WHERE dong_id = $1
+                                               """, fetch_dong_and_creator['id'])
+    participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
+    await bot.reply_to(message, str(fetch_dong_and_creator))
+    if fetch_dong_and_creator is not None:
+        await bot.forward_message(from_chat_id=fetch_dong_and_creator['group_id'],
+                                  chat_id=fetch_dong_and_creator['creator_id'], message_id=message.message_id)
+        await bot.send_message(chat_id=fetch_dong_and_creator['creator_id'],
+                               text=mt.dong_receipt_approval_message(dong_name=fetch_dong_and_creator['name'],
+                                                                     amount_per_person=fetch_dong_and_creator[
+                                                                                           'amount'] / len(
+                                                                         participants_list),
+                                                                     receipt_sender_id=message.from_user.id,
+                                                                     participants_list=participants_list , group_name=fetch_dong_and_creator['group_name'] , receipt_sender_user_name=message.from_user.username , receipt_sender_full_name=message.from_user.full_name))
+
 
 # ----------
 # KEYBOARD BUTTONS
@@ -97,6 +131,8 @@ async def handle_set_up_new_dong(call_back_query):
 
 async def start_db_and_bot():
     await create_pool()
+    global bot_info
+    bot_info = await bot_instance.get_bot_info() #fill bot info
     await bot.infinity_polling()
 
 # ----------
