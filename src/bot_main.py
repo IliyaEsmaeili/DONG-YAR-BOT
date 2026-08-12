@@ -1,4 +1,6 @@
 import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 import bot_instance
 import message_template as mt
 import dong_handler as dong
@@ -65,18 +67,22 @@ import pprint
 @bot.message_handler(content_types=['photo', 'document'], func=lambda
         message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id)
 async def reply_to_send_receipt_handler(message):
-    fetch_dong_and_creator = await fetch_one("""SELECT d.id, d.name, d.amount, d.creator_id, u.full_name , d.group_id , d.group_name
-                                                FROM dongs d
-                                                         JOIN users u ON u.telegram_id = d.creator_id
-                                                WHERE group_id = $1
-                                                  AND last_pinned_message_id = $2
-                                             """, message.chat.id, message.reply_to_message.message_id)
+    fetch_dong_and_creator = await fetch_one(
+        """SELECT d.id, d.name, d.amount, d.creator_id, u.full_name, d.group_id, d.group_name
+           FROM dongs d
+                    JOIN users u ON u.telegram_id = d.creator_id
+           WHERE group_id = $1
+             AND last_pinned_message_id = $2
+        """, message.chat.id, message.reply_to_message.message_id)
 
     fetch_dongs_participants = await fetch_all("""SELECT *
                                                   FROM dong_participants
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
     participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
+    participants_as_a_2d_vertical_keyboard_button_array = [[InlineKeyboardButton(text=participant , callback_data=f"paid:{participant}")]for participant in participants_list]
+    participants_as_a_2d_vertical_keyboard_button_array.append([InlineKeyboardButton(text="تایید نمیشه" , callback_data="fake_receipt")])
+
     await bot.reply_to(message, str(fetch_dong_and_creator))
     if fetch_dong_and_creator is not None:
         await bot.forward_message(from_chat_id=fetch_dong_and_creator['group_id'],
@@ -87,7 +93,11 @@ async def reply_to_send_receipt_handler(message):
                                                                                            'amount'] / len(
                                                                          participants_list),
                                                                      receipt_sender_id=message.from_user.id,
-                                                                     participants_list=participants_list , group_name=fetch_dong_and_creator['group_name'] , receipt_sender_user_name=message.from_user.username , receipt_sender_full_name=message.from_user.full_name))
+                                                                     participants_list=participants_list,
+                                                                     group_name=fetch_dong_and_creator['group_name'],
+                                                                     receipt_sender_user_name=message.from_user.username,
+                                                                     receipt_sender_full_name=message.from_user.full_name),
+                               reply_markup=InlineKeyboardMarkup(participants_as_a_2d_vertical_keyboard_button_array))
 
 
 # ----------
