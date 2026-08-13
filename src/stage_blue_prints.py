@@ -135,4 +135,8 @@ async def stage_confirm(message, user):
     await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2
     """ , sent.id , user.dong[-1].local_dong_id)
     await change_user_state(message.from_user, "stage_idle")
-    await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
+    try :
+        await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
+    except :
+        await bot.send_message(chat_id=message.from_user.id, text="بات ادمین نیست پس دنگ فرستاده شد اما پین نشد!")
+
