@@ -138,5 +138,5 @@ async def stage_confirm(message, user):
     try :
         await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
     except :
-        await bot.send_message(chat_id=message.from_user.id, text="بات ادمین نیست پس دنگ فرستاده شد اما پین نشد!")
+        await bot.send_message(chat_id=message.from_user.id, text=mt.bot_isnt_admin_and_couldnt_pin_message())
 

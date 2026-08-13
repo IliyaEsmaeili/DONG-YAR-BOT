@@ -292,3 +292,12 @@ def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_f
 لطفاً مشخص کنید این پرداخت مربوط به کدام شرکت‌کننده است.
 
 ⚠️ پس از تأیید، وضعیت پرداخت فرد انتخاب‌شده در گروه اعلام خواهد شد."""
+
+def bot_isnt_admin_message() :
+    return "بات ادمین نیست"
+
+def couldnt_pin_message() :
+    return "دنگ فرستاده شد اما پین نشد!"
+
+def bot_isnt_admin_and_couldnt_pin_message():
+    return bot_isnt_admin_message + couldnt_pin_message
