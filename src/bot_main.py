@@ -78,7 +78,7 @@ async def reply_to_send_receipt_handler(message):
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
     participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
-    keyboards.participants_to_approve(participants_list)
+
 
 
     if fetch_dong_and_creator is not None:
@@ -94,7 +94,7 @@ async def reply_to_send_receipt_handler(message):
                                                                      group_name=fetch_dong_and_creator['group_name'],
                                                                      receipt_sender_user_name=message.from_user.username,
                                                                      receipt_sender_full_name=message.from_user.full_name),
-                               reply_markup=InlineKeyboardMarkup(participants_as_a_2d_vertical_keyboard_button_array))
+                               reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(participants_list)))
 
 
 # ----------
