@@ -78,7 +78,7 @@ async def reply_to_send_receipt_handler(message):
                                                   FROM dong_participants
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
-    participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
+    participants_list = [participants['user_name'] for participants in fetch_dongs_participants if participants["has_paid"] == False]
 
 
 
