@@ -29,9 +29,7 @@ bot_info = None
 @bot.message_handler(commands=['start'])
 async def send_welcome(message):
     if message.chat.type in ("group" , "supergroup"): return #Avoid Sending message in groups
-    print("start")
     user = User(telegram_id=message.from_user.id , full_name=message.from_user.full_name)
-    print(user)
     await save_user(user)
 
     await bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
@@ -80,10 +78,9 @@ async def reply_to_send_receipt_handler(message):
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
     participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
-    participants_as_a_2d_vertical_keyboard_button_array = [[InlineKeyboardButton(text=participant , callback_data=f"paid:{participant}")]for participant in participants_list]
-    participants_as_a_2d_vertical_keyboard_button_array.append([InlineKeyboardButton(text="تایید نمیشه" , callback_data="fake_receipt")])
+    keyboards.participants_to_approve(participants_list)
 
-    await bot.reply_to(message, str(fetch_dong_and_creator))
+
     if fetch_dong_and_creator is not None:
         await bot.forward_message(from_chat_id=fetch_dong_and_creator['group_id'],
                                   chat_id=fetch_dong_and_creator['creator_id'], message_id=message.message_id)

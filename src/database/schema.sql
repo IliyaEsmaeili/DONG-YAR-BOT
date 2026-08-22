@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS dong_participants(
                     REFERENCES users(telegram_id)
                     ON DELETE CASCADE ,
     user_name TEXT ,
+    has_paid BOOLEAN NOT NULL DEFAULT FALSE ,
     UNIQUE(user_id , dong_id)
 );
 

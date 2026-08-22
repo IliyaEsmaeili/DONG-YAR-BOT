@@ -300,4 +300,4 @@ def couldnt_pin_message() :
     return "دنگ فرستاده شد اما پین نشد!"
 
 def bot_isnt_admin_and_couldnt_pin_message():
-    return bot_isnt_admin_message + couldnt_pin_message
+    return bot_isnt_admin_message() +"\n" + couldnt_pin_message()

@@ -33,3 +33,15 @@ dong_set_up = InlineKeyboardMarkup(
 
                                    callback_data="set_up_new_dong")],
              [InlineKeyboardButton(text="ربات رو استارت بزن", url=BOT_TELEGRAM_DEEP_LINK)]])
+
+
+# ----------
+# APPROVAL MESSAGE
+# ----------
+def participants_to_approve(participants_list):
+    participants_as_a_2d_vertical_keyboard_button_array = [
+        [InlineKeyboardButton(text=participant, callback_data=f"paid:{participant}")] for participant in
+        participants_list]
+    participants_as_a_2d_vertical_keyboard_button_array.append(
+        [InlineKeyboardButton(text="تایید نمیشه", callback_data="fake_receipt")])
+    return participants_as_a_2d_vertical_keyboard_button_array
