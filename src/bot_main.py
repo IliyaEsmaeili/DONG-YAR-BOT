@@ -78,7 +78,9 @@ async def reply_to_send_receipt_handler(message):
                                                   FROM dong_participants
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
-    participants_list = [participants['user_name'] for participants in fetch_dongs_participants if participants["has_paid"] == False]
+    participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
+    not_paid_participants_list = [participants['user_name'] for participants in fetch_dongs_participants if
+                         participants["has_paid"] == False]
 
 
 
@@ -95,7 +97,7 @@ async def reply_to_send_receipt_handler(message):
                                                                      group_name=fetch_dong_and_creator['group_name'],
                                                                      receipt_sender_user_name=message.from_user.username,
                                                                      receipt_sender_full_name=message.from_user.full_name),
-                               reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(participants_list , fetch_dong_and_creator['id'])))
+                               reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(not_paid_participants_list , fetch_dong_and_creator['id'])))
 
 
 # ----------
