@@ -1,4 +1,5 @@
 import telebot
+from bson import regex
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 import bot_instance
@@ -8,7 +9,7 @@ import keyboards
 import asyncio
 from data import User
 from database.connection import create_pool
-from database.repositories import save_user, fetch_one, fetch_all
+from database.repositories import save_user, fetch_one, fetch_all , execute_query
 
 bot = bot_instance.bot
 import logging
@@ -94,7 +95,7 @@ async def reply_to_send_receipt_handler(message):
                                                                      group_name=fetch_dong_and_creator['group_name'],
                                                                      receipt_sender_user_name=message.from_user.username,
                                                                      receipt_sender_full_name=message.from_user.full_name),
-                               reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(participants_list)))
+                               reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(participants_list , fetch_dong_and_creator['id'])))
 
 
 # ----------
@@ -135,6 +136,18 @@ async def handle_show_usage_guide(callback_query):
 async def handle_set_up_new_dong(call_back_query):
     await bot.answer_callback_query(call_back_query.id)
     await dong.set_up_dong(call_back=call_back_query)
+
+
+@bot.callback_query_handler(func=lambda call : call.data.startswith("paid_(dong:"))
+async def handle_receipt_approval(call_back_query):
+    #paid_(dong:1):ایلیا
+    #data list will be like (as pseudo code): paid_(dong:{int:dong_id})_{str:user} ->>> [0]:paid || [1] : (dong_id:{int}) || [2] : {name:{str}}
+    data_list = call_back_query.data.split('_')
+    dong_id = int(data_list[1][-2])
+    payer_name = data_list[2]
+    await execute_query("""UPDATE dong_participants SET has_paid = TRUE WHERE dong_id = $1 AND user_name = $2
+    """ , dong_id , payer_name)
+
 
 async def start_db_and_bot():
     await create_pool()

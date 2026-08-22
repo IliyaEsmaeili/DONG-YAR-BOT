@@ -38,10 +38,10 @@ dong_set_up = InlineKeyboardMarkup(
 # ----------
 # APPROVAL MESSAGE
 # ----------
-def participants_to_approve(participants_list):
+def participants_to_approve(participants_list , dong_id):
     participants_as_a_2d_vertical_keyboard_button_array = [
-        [InlineKeyboardButton(text=participant, callback_data=f"paid:{participant}")] for participant in
+        [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}")] for participant in
         participants_list]
     participants_as_a_2d_vertical_keyboard_button_array.append(
-        [InlineKeyboardButton(text="تایید نمیشه", callback_data="fake_receipt")])
+        [InlineKeyboardButton(text="تایید نمیشه", callback_data="denied")])
     return participants_as_a_2d_vertical_keyboard_button_array
