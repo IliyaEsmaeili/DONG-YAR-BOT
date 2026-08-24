@@ -269,9 +269,15 @@ def donate_info_message():
 https://reymit.ir/iliya_esmaeili"""
 
 
-def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_full_name, receipt_sender_user_name, receipt_sender_id, participants_list, group_name) :
+def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_full_name, receipt_sender_user_name, receipt_sender_id, participants_list, group_name , unpaid_list) :
     if isinstance(participants_list, list):
-        participants_text = "\n".join([f"  🔸 {p}" for p in participants_list])
+        participants_text = "\n"
+        for p in participants_list:
+            if p in unpaid_list:
+                participants_text = participants_text.__add__(f"  🔸 {p} | ❌ ").__add__("\n")
+            else:
+                participants_text = participants_text.__add__(f"  🔸 {p} | ✅ ").__add__("\n")
+        # participants_text = "\n".join([ for p in participants_list])
     else:
         participants_text = participants_list
 
@@ -284,7 +290,7 @@ def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_f
 @{receipt_sender_user_name if receipt_sender_user_name else "@ not found"}
 🆔 شناسه کاربر: {receipt_sender_id}
 
-👥 شرکت‌کنندگان دنگ:
+👥 شرکت‌کنندگان دنگ:(و وضعیت پرداخت)
 {participants_text}
 
 ━━━━━━━━━━━━━━

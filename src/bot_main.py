@@ -73,15 +73,14 @@ async def reply_to_send_receipt_handler(message):
            WHERE group_id = $1
              AND last_pinned_message_id = $2
         """, message.chat.id, message.reply_to_message.message_id)
-
     fetch_dongs_participants = await fetch_all("""SELECT *
                                                   FROM dong_participants
                                                   WHERE dong_id = $1
                                                """, fetch_dong_and_creator['id'])
+
     participants_list = [participants['user_name'] for participants in fetch_dongs_participants]
     not_paid_participants_list = [participants['user_name'] for participants in fetch_dongs_participants if
                          participants["has_paid"] == False]
-
 
 
     if fetch_dong_and_creator is not None:
@@ -96,8 +95,11 @@ async def reply_to_send_receipt_handler(message):
                                                                      participants_list=participants_list,
                                                                      group_name=fetch_dong_and_creator['group_name'],
                                                                      receipt_sender_user_name=message.from_user.username,
-                                                                     receipt_sender_full_name=message.from_user.full_name),
+                                                                     receipt_sender_full_name=message.from_user.full_name , unpaid_list=not_paid_participants_list),
                                reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(not_paid_participants_list , fetch_dong_and_creator['id'])))
+
+#send the new message to the group if not editable
+    # await bot.edit_message_text(chat_id=fetch_dong_and_creator['group_id'] , message_id=message.reply_to_message.message_id , )
 
 
 # ----------
