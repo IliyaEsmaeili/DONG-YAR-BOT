@@ -1,5 +1,6 @@
+
 import telebot
-from bson import regex
+
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 import bot_instance
@@ -67,9 +68,8 @@ import pprint
         message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id)
 async def reply_to_send_receipt_handler(message):
     fetch_dong_and_creator = await fetch_one(
-        """SELECT d.id, d.name, d.amount, d.creator_id, u.full_name, d.group_id, d.group_name
-           FROM dongs d
-                    JOIN users u ON u.telegram_id = d.creator_id
+        """SELECT d.id, d.name, d.amount, d.creator_id, u.full_name, d.group_id, d.group_name 
+           FROM dongs d JOIN users u ON u.telegram_id = d.creator_id
            WHERE group_id = $1
              AND last_pinned_message_id = $2
         """, message.chat.id, message.reply_to_message.message_id)
@@ -97,9 +97,6 @@ async def reply_to_send_receipt_handler(message):
                                                                      receipt_sender_user_name=message.from_user.username,
                                                                      receipt_sender_full_name=message.from_user.full_name , unpaid_list=not_paid_participants_list),
                                reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(not_paid_participants_list , fetch_dong_and_creator['id'])))
-
-#send the new message to the group if not editable
-    # await bot.edit_message_text(chat_id=fetch_dong_and_creator['group_id'] , message_id=message.reply_to_message.message_id , )
 
 
 # ----------
@@ -153,6 +150,44 @@ async def handle_receipt_approval(call_back_query):
     """ , dong_id , payer_name)
 
 
+    dong_info = await fetch_one("""SELECT d.* , u.full_name , u.telegram_id FROM dongs d JOIN users u ON d.creator_id = u.telegram_id WHERE d.id = $1
+    """ , dong_id)
+    participants_info = await fetch_all("""SELECT * FROM dong_participants WHERE dong_id = $1
+    """ , dong_id)
+    participants_list = [participants['user_name'] for participants in participants_info]
+    not_paid_participants_list = [participants['user_name'] for participants in participants_info if
+                                  participants["has_paid"] == False]
+
+
+    try:
+        await bot.edit_message_text(chat_id=dong_info['group_id'], message_id=dong_info['last_pinned_message_id'],
+                                    text=mt.dong_summary_main_prompt(dong_name=dong_info['name'], amount=dong_info[
+                                        'amount'], participants=participants_list, info=dong_info['additional_info'],
+                                                                     creator_name=dong_info['full_name'],
+                                                                     creator_id=dong_info['telegram_id'],
+                                                                     unpaid_list=not_paid_participants_list),
+                                    parse_mode="HTML")
+        await bot.send_message(chat_id=dong_info['group_id'], reply_to_message_id=dong_info['last_pinned_message_id'],
+                           text=f"""ممنون از {payer_name} بابت پرداخت دنگ اش
+                           افراد باقی مانده: {not_paid_participants_list}
+        """)
+        await bot.send_message(chat_id=call_back_query.from_user.id,
+                               text="داخل گروه اعلام شد و همچنین متن دنگ edit شد.")
+    except Exception as e  :
+        print(e)
+        new_message = await bot.send_message(chat_id=dong_info['group_id'],
+                                    text=mt.dong_summary_main_prompt(dong_name=dong_info['name'], amount=dong_info[
+                                        'amount'], participants=participants_list, info=dong_info['additional_info'],
+                                                                     creator_name=dong_info['full_name'],
+                                                                     creator_id=dong_info['telegram_id'],
+                                                                     unpaid_list=not_paid_participants_list),
+                                    parse_mode="HTML")
+        
+        await bot.send_message(chat_id=dong_info['group_id'] , text= f"""ممنون از {payer_name} بابت پرداخت دنگ اش""" , reply_to_message_id=new_message.id)
+        await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2 
+        """ , new_message.id , dong_id)
+        await bot.send_message(chat_id=call_back_query.from_user.id,
+                               text="داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.")
 async def start_db_and_bot():
     await create_pool()
     global bot_info

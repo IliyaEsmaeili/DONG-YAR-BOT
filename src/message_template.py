@@ -75,7 +75,8 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
 
 
     """
-def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None ) :
+def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None , unpaid_list = None  ) :
+    if unpaid_list is None : unpaid_list = participants
     if stage is not None :
         match stage :
             case "stage_begin" :
@@ -93,8 +94,13 @@ def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info
 
     # Check if participants is a list, and transform it into a clean layout
     if isinstance(participants, list):
-        # This joins each name with a new line and a bullet point emoji
-        participants_text = "\n".join([f"  🔸 {p}" for p in participants])
+        participants_text = "\n"
+        for p in participants:
+            if p in unpaid_list:
+                participants_text = participants_text.__add__(f"  🔸 {p} | ❌ ").__add__("\n")
+            else:
+                participants_text = participants_text.__add__(f"  🔸 {p} | ✅ ").__add__("\n")
+        # participants_text = "\n".join([ for p in participants_list])
     else:
         participants_text = participants
 
@@ -109,7 +115,7 @@ def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info
 💰 مبلغ کل
 {amount}
 
-👥 افراد شریک
+👥 افراد شریک و وضعیت پرداخت
 {participants_text}
 
 💰 بدهی هر نفر
