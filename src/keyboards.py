@@ -62,3 +62,11 @@ def participants_to_approve(participants_list, dong_id, some_one_just_paid=None)
 
 
     return participants_as_a_2d_vertical_keyboard_button_array
+
+
+def stage_begin_start_button() :
+     return InlineKeyboardMarkup([[InlineKeyboardButton(text="شروع" , callback_data="stage_begin_start")]])
+
+
+def stage_begin_submit_button():
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text="تایید", callback_data="stage_begin_submit")]])
