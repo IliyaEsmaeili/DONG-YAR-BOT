@@ -274,8 +274,19 @@ def donate_info_message():
 🔗 لینک حمایت مالی (دونیت):
 https://reymit.ir/iliya_esmaeili"""
 
+def dong_receipt_approval_message_default_prompt() :
+    return """لطفاً مشخص کنید این پرداخت مربوط به کدام شرکت‌کننده است.
 
-def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_full_name, receipt_sender_user_name, receipt_sender_id, participants_list, group_name , unpaid_list) :
+⚠️ پس از تأیید، وضعیت پرداخت فرد انتخاب‌شده در گروه اعلام خواهد شد."""
+
+def receipt_sender_info(receipt_sender_full_name ,receipt_sender_user_name , receipt_sender_id):
+    return f"""👤 ارسال‌کننده رسید: {receipt_sender_full_name if receipt_sender_full_name else "یافت نشد"}
+@{receipt_sender_user_name if receipt_sender_user_name else "@ not found"}
+🆔 شناسه کاربر: {receipt_sender_id}"""
+
+def reciept_senders_recipet_was_approved(receipt_sender_full_name):
+    return f"""رسید ارسالی از {receipt_sender_full_name} تایید شد."""
+def dong_receipt_approval_message(dong_name, amount_per_person , participants_list, group_name , unpaid_list ,reciept_sender_info ,  prompt = dong_receipt_approval_message_default_prompt()  ) :
     if isinstance(participants_list, list):
         participants_text = "\n"
         for p in participants_list:
@@ -292,18 +303,16 @@ def dong_receipt_approval_message(dong_name, amount_per_person, receipt_sender_f
 🏷 نام دنگ: {dong_name} 
 در گروه :‌{group_name}
 💰 مبلغ سهم هر نفر: {amount_per_person} تومان
-👤 ارسال‌کننده رسید: {receipt_sender_full_name if receipt_sender_full_name else "یافت نشد"}
-@{receipt_sender_user_name if receipt_sender_user_name else "@ not found"}
-🆔 شناسه کاربر: {receipt_sender_id}
+{reciept_sender_info}
 
 👥 شرکت‌کنندگان دنگ:(و وضعیت پرداخت)
 {participants_text}
 
 ━━━━━━━━━━━━━━
 
-لطفاً مشخص کنید این پرداخت مربوط به کدام شرکت‌کننده است.
+{prompt}"""
 
-⚠️ پس از تأیید، وضعیت پرداخت فرد انتخاب‌شده در گروه اعلام خواهد شد."""
+
 
 def bot_isnt_admin_message() :
     return "بات ادمین نیست"
@@ -328,3 +337,12 @@ def the_new_payment_was_successfully_notified_in_group(could_the_bot_edit_last_p
          return "پرداختی جدید داخل گروه اعلام شد و همچنین متن دنگ edit شد."
      else:
          return "داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.(متن قبلی قابل دسترس نبود)"
+
+def some_one_just_payed_dong_in_reply_markup(payer_name):
+    return f"""پرداخت دنگ {payer_name} با موفقیت تایید شد.
+"""
+def dont_press_any_reply_markup() :
+    return """از کلیک کردن دوباره روی دکمه های این پیام پرهیز کنید."""
+
+def you_approved_this_dong_before():
+    return """شما این دنگ را تایید کردید.✅"""

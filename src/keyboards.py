@@ -1,5 +1,6 @@
 from telebot.types import KeyboardButton , ReplyKeyboardMarkup , InlineKeyboardButton, InlineKeyboardMarkup
 from bot_instance import BOT_TELEGRAM_DEEP_LINK
+import message_template as mt
 # ----------
 # MAIN KEYBOARD
 # ----------
@@ -37,10 +38,27 @@ dong_set_up = InlineKeyboardMarkup(
 # ----------
 # APPROVAL MESSAGE
 # ----------
-def participants_to_approve(participants_list , dong_id):
-    participants_as_a_2d_vertical_keyboard_button_array = [
-        [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}" , style="primary")] for participant in
-        participants_list]
-    participants_as_a_2d_vertical_keyboard_button_array.append(
-        [InlineKeyboardButton(text="تایید نمیشه", callback_data="paid_(dong:denied)" , style="danger")])
+def participants_to_approve(participants_list, dong_id, some_one_just_paid=None):
+    # participants_as_a_2d_vertical_keyboard_button_array = [
+    #     [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}" , style="primary")] for participant in
+    #     participants_list
+    # ]
+    participants_as_a_2d_vertical_keyboard_button_array = []
+    if some_one_just_paid is None :
+        for participant in participants_list:
+            participants_as_a_2d_vertical_keyboard_button_array.append(
+                [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}",
+                                      style="primary")])
+        participants_as_a_2d_vertical_keyboard_button_array.append(
+            [InlineKeyboardButton(text="تایید نمیشه", callback_data="paid_(dong:denied)", style="danger")])
+    else:
+        participants_as_a_2d_vertical_keyboard_button_array.append([InlineKeyboardButton(text=mt.some_one_just_payed_dong_in_reply_markup(some_one_just_paid) , style="success" , callback_data="dummy_call_back")])
+        participants_as_a_2d_vertical_keyboard_button_array.append(
+            [InlineKeyboardButton(text=mt.dont_press_any_reply_markup(),
+                                  style="danger" , callback_data="dont_press_button")])
+    # [ [] [] [] [] ]
+
+
+
+
     return participants_as_a_2d_vertical_keyboard_button_array

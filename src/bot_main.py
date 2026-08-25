@@ -91,11 +91,12 @@ async def reply_to_send_receipt_handler(message):
                                                                      amount_per_person=fetch_dong_and_creator[
                                                                                            'amount'] / len(
                                                                          participants_list),
-                                                                     receipt_sender_id=message.from_user.id,
+
+                                                                     reciept_sender_info=mt.receipt_sender_info(receipt_sender_full_name=message.from_user.full_name , receipt_sender_id=message.from_user.id , receipt_sender_user_name=message.from_user.username) ,
                                                                      participants_list=participants_list,
                                                                      group_name=fetch_dong_and_creator['group_name'],
-                                                                     receipt_sender_user_name=message.from_user.username,
-                                                                     receipt_sender_full_name=message.from_user.full_name , unpaid_list=not_paid_participants_list),
+
+                                                                      unpaid_list=not_paid_participants_list),
                                reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(not_paid_participants_list , fetch_dong_and_creator['id'])))
 
 
@@ -158,7 +159,8 @@ async def handle_receipt_approval(call_back_query):
     participants_list = [participants['user_name'] for participants in participants_info]
     not_paid_participants_list = [participants['user_name'] for participants in participants_info if
                                   participants["has_paid"] == False]
-
+    if payer_name in not_paid_participants_list :
+        not_paid_participants_list.remove(payer_name)
 
     try:
         await bot.edit_message_text(chat_id=dong_info['group_id'], message_id=dong_info['last_pinned_message_id'],
@@ -193,7 +195,8 @@ async def handle_receipt_approval(call_back_query):
             await bot.pin_chat_message(chat_id=dong_info['group_id'], message_id=new_message.id, disable_notification=False)
         except:
             await bot.send_message(chat_id=dong_info['creator_id'], text=mt.bot_isnt_admin_and_couldnt_pin_message())
-
+    await bot.edit_message_text(chat_id=dong_info['creator_id'] ,message_id =  call_back_query.message.id ,  text=mt.dong_receipt_approval_message(dong_name=dong_info['name'] , amount_per_person= dong_info['amount'] / len(participants_list) , reciept_sender_info=mt.reciept_senders_recipet_was_approved(payer_name),group_name=dong_info['group_name'] , unpaid_list=not_paid_participants_list , prompt=mt.you_approved_this_dong_before() ,participants_list=participants_list  ))
+    await bot.edit_message_reply_markup(chat_id=dong_info['creator_id'] , message_id= call_back_query.message.id,  reply_markup=InlineKeyboardMarkup(keyboards.participants_to_approve(participants_list , dong_id , some_one_just_paid=payer_name)))
 
 async def start_db_and_bot():
     await create_pool()
