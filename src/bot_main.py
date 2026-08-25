@@ -143,9 +143,10 @@ async def handle_set_up_new_dong(call_back_query):
 async def handle_receipt_approval(call_back_query):
     #paid_(dong:1):ایلیا
     #data list will be like (as pseudo code): paid_(dong:{int:dong_id})_{str:user} ->>> [0]:paid || [1] : (dong_id:{int}) || [2] : {name:{str}}
-    data_list = call_back_query.data.split('_')
-    dong_id = int(data_list[1][-2])
-    payer_name = data_list[2]
+    # paid_(dong:12)_ایلیا
+    rest = call_back_query.data.removeprefix("paid_(dong:")  
+    dong_id_str, payer_name = rest.split(")_", 1)
+    dong_id = int(dong_id_str)
     await execute_query("""UPDATE dong_participants SET has_paid = TRUE WHERE dong_id = $1 AND user_name = $2
     """ , dong_id , payer_name)
 
