@@ -346,3 +346,6 @@ def dont_press_any_reply_markup() :
 
 def you_approved_this_dong_before():
     return """شما این دنگ را تایید کردید.✅"""
+
+def couldnt_unpin_last_pinned_message():
+    return """بات نتوانست پیام دنگ قبلی را unpin کند اگر pin است لطفا آن را unpin کنید چرا که فقط رسید های ریپلای شده روی اخرین پیام کار میکند."""

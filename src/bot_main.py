@@ -187,12 +187,18 @@ async def handle_receipt_approval(call_back_query):
                                     parse_mode="HTML")
 
         await bot.send_message(chat_id=dong_info['group_id'] , text= mt.thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list) , reply_to_message_id=new_message.id)
+        last_pinned_message_before_change = dong_info['last_pinned_message_id']
         await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2 
         """ , new_message.id , dong_id)
         await bot.send_message(chat_id=call_back_query.from_user.id,
                                text=mt.the_new_payment_was_successfully_notified_in_group(False))
         try:
+            try:
+                await bot.unpin_chat_message(chat_id=dong_info['group_id'] , message_id= last_pinned_message_before_change)
+            except Exception as e  :
+                await bot.send_message(chat_id=dong_info['creator_id'], text=mt.couldnt_unpin_last_pinned_message())
             await bot.pin_chat_message(chat_id=dong_info['group_id'], message_id=new_message.id, disable_notification=False)
+
         except:
             await bot.send_message(chat_id=dong_info['creator_id'], text=mt.bot_isnt_admin_and_couldnt_pin_message())
     await bot.edit_message_text(chat_id=dong_info['creator_id'] ,message_id =  call_back_query.message.id ,  text=mt.dong_receipt_approval_message(dong_name=dong_info['name'] , amount_per_person= dong_info['amount'] / len(participants_list) , reciept_sender_info=mt.reciept_senders_recipet_was_approved(payer_name),group_name=dong_info['group_name'] , unpaid_list=not_paid_participants_list , prompt=mt.you_approved_this_dong_before() ,participants_list=participants_list  ))
