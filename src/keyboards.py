@@ -20,7 +20,7 @@ main_keyboard.row(_donate_button)
 # ----------
 start_inline = InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(text="راهنما استفاده", callback_data="usage_guide")
+            InlineKeyboardButton(text="راهنما استفاده", callback_data="usage_guide" , style="primary")
         ]
     ])
 
@@ -30,9 +30,8 @@ start_inline = InlineKeyboardMarkup([
 # ----------
 dong_set_up = InlineKeyboardMarkup(
             [[InlineKeyboardButton(text="ایجاد دنگ جدید",
-
-                                   callback_data="set_up_new_dong")],
-             [InlineKeyboardButton(text="ربات رو استارت بزن", url=BOT_TELEGRAM_DEEP_LINK)]])
+                                   callback_data="set_up_new_dong" , style="primary")],
+             [InlineKeyboardButton(text="ربات رو استارت بزن", url=BOT_TELEGRAM_DEEP_LINK , style="success")]])
 
 
 # ----------
@@ -40,8 +39,8 @@ dong_set_up = InlineKeyboardMarkup(
 # ----------
 def participants_to_approve(participants_list , dong_id):
     participants_as_a_2d_vertical_keyboard_button_array = [
-        [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}")] for participant in
+        [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}" , style="primary")] for participant in
         participants_list]
     participants_as_a_2d_vertical_keyboard_button_array.append(
-        [InlineKeyboardButton(text="تایید نمیشه", callback_data="denied")])
+        [InlineKeyboardButton(text="تایید نمیشه", callback_data="paid_(dong:denied)" , style="danger")])
     return participants_as_a_2d_vertical_keyboard_button_array

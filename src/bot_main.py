@@ -144,7 +144,7 @@ async def handle_receipt_approval(call_back_query):
     #paid_(dong:1):ایلیا
     #data list will be like (as pseudo code): paid_(dong:{int:dong_id})_{str:user} ->>> [0]:paid || [1] : (dong_id:{int}) || [2] : {name:{str}}
     # paid_(dong:12)_ایلیا
-    rest = call_back_query.data.removeprefix("paid_(dong:")  
+    rest = call_back_query.data.removeprefix("paid_(dong:")
     dong_id_str, payer_name = rest.split(")_", 1)
     dong_id = int(dong_id_str)
     await execute_query("""UPDATE dong_participants SET has_paid = TRUE WHERE dong_id = $1 AND user_name = $2
@@ -172,6 +172,8 @@ async def handle_receipt_approval(call_back_query):
                            text=mt.thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list))
         await bot.send_message(chat_id=call_back_query.from_user.id,
                                text=mt.the_new_payment_was_successfully_notified_in_group(True))
+
+
     except Exception as e  :
         print(e)
         new_message = await bot.send_message(chat_id=dong_info['group_id'],
