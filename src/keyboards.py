@@ -65,8 +65,9 @@ def participants_to_approve(participants_list, dong_id, some_one_just_paid=None)
 
 
 def stage_begin_start_button() :
-     return InlineKeyboardMarkup([[InlineKeyboardButton(text="شروع" , callback_data="stage_begin_start")]])
+     return ReplyKeyboardMarkup(one_time_keyboard=True , resize_keyboard=True).row(KeyboardButton(style= "primary" , text="شروع"))
 
 
-def stage_begin_submit_button():
-    return InlineKeyboardMarkup([[InlineKeyboardButton(text="تایید", callback_data="stage_begin_submit")]])
+def stage_confirm_submit_button():
+    return ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).row(
+        KeyboardButton(style="success", text="تایید و ارسال"))

@@ -1,6 +1,7 @@
 import asyncio
 
 import bot_instance, data, message_template as mt
+import keyboards
 from database.repositories import user_state_fetch, change_user_state, fetch_one, get_user_from_telegram_id, \
     execute_query
 bot = bot_instance.bot
@@ -30,6 +31,10 @@ async def stage_begin(message , user):
                   """, bot_message.id, user.dong[-1].local_dong_id)
 
     await change_user_state(message.from_user, "stage_name")
+# @bot.callback_query_handler(lambda c : c.data == "stage_begin_start")
+# async def stage_begin_start_button_handler(call_back) :
+#     await change_user_state(call_back.from_user, "stage_name")
+#
 
 
 async def stage_name(message, user):
@@ -111,6 +116,7 @@ async def stage_additional_info(message, user):
                                                                                 amount=user.dong[-1].amount,
                                                                                 participants=user.dong[-1].participants,
                                                                                 info=user.dong[-1].additional_info))
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id , message_id=bot_message_id)
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_confirm")
 
