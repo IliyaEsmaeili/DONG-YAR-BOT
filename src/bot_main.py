@@ -168,11 +168,9 @@ async def handle_receipt_approval(call_back_query):
                                                                      unpaid_list=not_paid_participants_list),
                                     parse_mode="HTML")
         await bot.send_message(chat_id=dong_info['group_id'], reply_to_message_id=dong_info['last_pinned_message_id'],
-                           text=f"""ممنون از {payer_name} بابت پرداخت دنگ اش
-                           افراد باقی مانده: {not_paid_participants_list}
-        """)
+                           text=mt.thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list))
         await bot.send_message(chat_id=call_back_query.from_user.id,
-                               text="داخل گروه اعلام شد و همچنین متن دنگ edit شد.")
+                               text=mt.the_new_payment_was_successfully_notified_in_group(True))
     except Exception as e  :
         print(e)
         new_message = await bot.send_message(chat_id=dong_info['group_id'],
@@ -182,12 +180,18 @@ async def handle_receipt_approval(call_back_query):
                                                                      creator_id=dong_info['telegram_id'],
                                                                      unpaid_list=not_paid_participants_list),
                                     parse_mode="HTML")
-        
-        await bot.send_message(chat_id=dong_info['group_id'] , text= f"""ممنون از {payer_name} بابت پرداخت دنگ اش""" , reply_to_message_id=new_message.id)
+
+        await bot.send_message(chat_id=dong_info['group_id'] , text= mt.thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list) , reply_to_message_id=new_message.id)
         await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2 
         """ , new_message.id , dong_id)
         await bot.send_message(chat_id=call_back_query.from_user.id,
-                               text="داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.")
+                               text=mt.the_new_payment_was_successfully_notified_in_group(False))
+        try:
+            await bot.pin_chat_message(chat_id=dong_info['group_id'], message_id=new_message.id, disable_notification=False)
+        except:
+            await bot.send_message(chat_id=dong_info['creator_id'], text=mt.bot_isnt_admin_and_couldnt_pin_message())
+
+
 async def start_db_and_bot():
     await create_pool()
     global bot_info

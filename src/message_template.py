@@ -313,3 +313,18 @@ def couldnt_pin_message() :
 
 def bot_isnt_admin_and_couldnt_pin_message():
     return bot_isnt_admin_message() +"\n" + couldnt_pin_message()
+
+def thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list):
+    unpaid_text = "\n"
+    for unpaid in not_paid_participants_list :
+        unpaid_text += unpaid
+        unpaid_text += "\n"
+    return f"""ممنون از {payer_name} بابت پرداخت دنگ اش
+                           افراد باقی مانده: {unpaid_text}
+        """
+
+def the_new_payment_was_successfully_notified_in_group(could_the_bot_edit_last_pinned) :
+     if could_the_bot_edit_last_pinned  :
+         return "پرداختی جدید داخل گروه اعلام شد و همچنین متن دنگ edit شد."
+     else:
+         return "داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.(متن قبلی قابل دسترس نبود)"
