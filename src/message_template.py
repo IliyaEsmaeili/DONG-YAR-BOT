@@ -370,3 +370,7 @@ def you_approved_this_dong_before():
 
 def couldnt_unpin_last_pinned_message():
     return """بات نتوانست پیام دنگ قبلی را unpin کند اگر pin است لطفا آن را unpin کنید چرا که فقط رسید های ریپلای شده روی اخرین پیام کار میکند."""
+
+def your_receipt_was_successfully_sent():
+    return """ممنون از شما🙏🙏
+    فیش ارسالی شما با موفقیت برای مادرخرج ارسال شد و پس تایید ایشان ثبت می شود!"""

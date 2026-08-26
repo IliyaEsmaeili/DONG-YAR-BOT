@@ -57,7 +57,7 @@ async def send_bot_guid_to_gap(message):
 # receipt check
 # ----------
 
-import util.receipt_detector
+
 @bot.message_handler(func=lambda message : receipt_detector.is_bank_receipt(message.text) )
 @bot.message_handler(func=lambda
         message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id and any(
@@ -101,7 +101,7 @@ async def reply_to_send_receipt_handler(message):
                                reply_markup=InlineKeyboardMarkup(
                                    keyboards.participants_to_approve(not_paid_participants_list,
                                                                      fetch_dong_and_creator['id'])))
-
+        await bot.reply_to(message=message , text=mt.your_receipt_was_successfully_sent())
 
 # ----------
 # KEYBOARD BUTTONS
