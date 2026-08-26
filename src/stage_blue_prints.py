@@ -19,7 +19,7 @@ async def dong_creation_router(message):
         case "stage_amount" : await stage_amount(message, user)
         case "stage_participants" : await stage_participants(message, user)
         case "stage_additional_info" : await stage_additional_info(message, user)
-        case "stage_confirm" : await stage_confirm(message, user)
+        case "stage_confirm" : await stage_confirm(user)
 
 async def stage_begin(message , user):
     bot_message = await bot.send_message(message.from_user.id,
@@ -122,6 +122,11 @@ async def stage_additional_info(message, user):
 
 
 
+@bot.callback_query_handler(lambda call : call.data == "submit_dong")
+async def dong_submit_button_handler(call_back):
+    await change_user_state(telegram_id=call_back.from_user.id ,state= "stage_confirm")
+    user = await get_user_from_telegram_id(telegram_id=call_back.from_user.id)
+    await stage_confirm(user)
 
 async def stage_confirm(user):
     bot_message_id = user.dong[-1].big_prompt_message
@@ -143,7 +148,7 @@ async def stage_confirm(user):
                                                                                              -1].additional_info , creator_name=user.full_name , creator_id=user.telegram_id) , parse_mode="HTML" )
     await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2
     """ , sent.id , user.dong[-1].local_dong_id)
-    #await change_user_state(message.from_user, "stage_idle")
+    await change_user_state(telegram_id= user.telegram_id, state = "stage_idle")
     try :
         await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
     except :

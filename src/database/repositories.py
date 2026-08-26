@@ -66,16 +66,27 @@ async def user_state_fetch(message):
 
     return row["state"]
 
-async def change_user_state(user, state):
-    await execute_query(
-        """
-        UPDATE users
-        SET state = $1
-        WHERE telegram_id = $2
-        """,
-        state,
-        user.id
-    )
+async def change_user_state(user = None , state = None , telegram_id = None ):
+    if telegram_id is None :
+        await execute_query(
+            """
+            UPDATE users
+            SET state = $1
+            WHERE telegram_id = $2
+            """,
+            state,
+            user.id
+        )
+    else:
+        await execute_query(
+            """
+            UPDATE users
+            SET state = $1
+            WHERE telegram_id = $2
+            """,
+            state,
+            telegram_id
+        )
 
 
 async def get_user_from_telegram_id(telegram_id):
