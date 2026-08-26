@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from telebot.async_telebot import AsyncTeleBot
 
-
 load_dotenv()
 BALE_TOKEN = os.getenv("BALE_BOT_TOKEN")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -13,5 +12,6 @@ if TELEGRAM_TOKEN is None:
 
 bot = AsyncTeleBot(TELEGRAM_TOKEN)
 
-async def get_bot_info() :
+
+async def get_bot_info():
     return await bot.get_me()

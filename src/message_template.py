@@ -1,15 +1,16 @@
-
-
 def welcome_message_on_start():
     return """سلام! ✋ به دنگ‌ یار خوش اومدی! 💸  
       
 من اینجام تا دیگه سر حساب و کتاب دورهمی‌ها، سفرها و کافه‌ها به مشکل نخورید. 
       
 می‌تونی منو به گروهت اضافه کنی تا حواسم به دنگِ همه باشه، یا همینجا یه صورت‌حساب جدید بسازی و لینکش رو برای دوستات بفرستی."""
+
+
 # " " taghir space
 
 def welcome_menu_on_start():
     return "از منوی زیر مشخص کن چیکار کنیم: 👇"
+
 
 def welcome_message_on_group_new_dong(group_name):
     return f"""
@@ -30,10 +31,10 @@ def heard_dong():
         """
 
 
-def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" " , stage = None):
-    if stage is not None :
-        match stage :
-            case "stage_begin" :
+def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info="-", step=0, prompt=" ", stage=None):
+    if stage is not None:
+        match stage:
+            case "stage_begin":
                 step = 0
             case "stage_name":
                 step = 1
@@ -75,11 +76,14 @@ def dong_creation_main_prompt(dong_name="-", amount="-", participants="-", info=
 
 
     """
-def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info="-", step=0, prompt=" " , stage = None , creator_name = None , creator_id = None , unpaid_list = None  ) :
-    if unpaid_list is None : unpaid_list = participants
-    if stage is not None :
-        match stage :
-            case "stage_begin" :
+
+
+def dong_summary_main_prompt(dong_name="-", amount=None, participants="-", info="-", step=0, prompt=" ", stage=None,
+                             creator_name=None, creator_id=None, unpaid_list=None):
+    if unpaid_list is None: unpaid_list = participants
+    if stage is not None:
+        match stage:
+            case "stage_begin":
                 step = 0
             case "stage_name":
                 step = 1
@@ -132,6 +136,7 @@ def dong_summary_main_prompt(dong_name="-", amount= None, participants="-", info
 
     """
 
+
 def stage_name_prompt():
     name_prompt = """بزن بریم یه دنگ جدید درست کنیم 💸
 اول بگو برای چی بوده؟ اسم مکان، کافه، رستوران یا هر توضیحی که دوست داری بنویس.
@@ -146,8 +151,10 @@ def stage_amount_prompt():
 مثلاً: 850000
     """
 
+
 def stage_amount_validation_prompt():
     return "لطفا عدد رو به صورت انگلیسی و 'هزار تومان' وارد کنید."
+
 
 def stage_participants_prompt():
     return """چه کسانی توی این دنگ شریکن؟ 👥
@@ -174,7 +181,6 @@ def stage_confirm_prompt():
 
 در صورت تایید، کلمه 'تایید' را ارسال کنید:
 """
-
 
 
 def guide_message():
@@ -204,9 +210,7 @@ def guide_message():
     """
 
 
-
-
-def github_info_message() :
+def github_info_message():
     return """این پروژه کاملا Open Source منتشر شده.💻
 
 شما میتونید کدها رو ببینید، فورک کنید، تغییر بدید و واسه خودتون شخصی‌سازی کنید.
@@ -225,6 +229,8 @@ def telegram_info_message():
 اگه اونجا راحت‌تری، میتونی از طریق آیدی زیر پیداش کنی و دنگ‌هات رو اونجا مدیریت کنی:
 
 🆔 @dong_yaar_bot"""
+
+
 def bale_info_message():
     return """این ربات همزمان توی بله هم با قدرت فعال و در دسترسه! 🚀
 
@@ -253,8 +259,9 @@ https://github.com/IliyaEsmaeili
 💼 لینکدین هلیا: helia-ghandi
 """
 
+
 def bot_info_message():
-   return """ایده ساخت این بات از یه درد مشترک و عمیق سرچشمه میگیره: دوستایی که هیچ‌وقت دنگ‌هاشون رو نمیزدن..! 🥲
+    return """ایده ساخت این بات از یه درد مشترک و عمیق سرچشمه میگیره: دوستایی که هیچ‌وقت دنگ‌هاشون رو نمیزدن..! 🥲
 
  تصمیم گرفتیم دست به کد بشیم و این بات رو بنویسیم تا یه کمکی به مادر خرج های عزیز و مظلوم کرده باشیم.💳 😂
 
@@ -274,19 +281,25 @@ def donate_info_message():
 🔗 لینک حمایت مالی (دونیت):
 https://reymit.ir/iliya_esmaeili"""
 
-def dong_receipt_approval_message_default_prompt() :
+
+def dong_receipt_approval_message_default_prompt():
     return """لطفاً مشخص کنید این پرداخت مربوط به کدام شرکت‌کننده است.
 
 ⚠️ پس از تأیید، وضعیت پرداخت فرد انتخاب‌شده در گروه اعلام خواهد شد."""
 
-def receipt_sender_info(receipt_sender_full_name ,receipt_sender_user_name , receipt_sender_id):
+
+def receipt_sender_info(receipt_sender_full_name, receipt_sender_user_name, receipt_sender_id):
     return f"""👤 ارسال‌کننده رسید: {receipt_sender_full_name if receipt_sender_full_name else "یافت نشد"}
 @{receipt_sender_user_name if receipt_sender_user_name else "@ not found"}
 🆔 شناسه کاربر: {receipt_sender_id}"""
 
+
 def reciept_senders_recipet_was_approved(receipt_sender_full_name):
     return f"""رسید ارسالی از {receipt_sender_full_name} تایید شد."""
-def dong_receipt_approval_message(dong_name, amount_per_person , participants_list, group_name , unpaid_list ,reciept_sender_info ,  prompt = dong_receipt_approval_message_default_prompt()  ) :
+
+
+def dong_receipt_approval_message(dong_name, amount_per_person, participants_list, group_name, unpaid_list,
+                                  reciept_sender_info, prompt=dong_receipt_approval_message_default_prompt()):
     if isinstance(participants_list, list):
         participants_text = "\n"
         for p in participants_list:
@@ -313,39 +326,47 @@ def dong_receipt_approval_message(dong_name, amount_per_person , participants_li
 {prompt}"""
 
 
-
-def bot_isnt_admin_message() :
+def bot_isnt_admin_message():
     return "بات ادمین نیست"
 
-def couldnt_pin_message() :
+
+def couldnt_pin_message():
     return "دنگ فرستاده شد اما پین نشد!"
 
-def bot_isnt_admin_and_couldnt_pin_message():
-    return bot_isnt_admin_message() +"\n" + couldnt_pin_message()
 
-def thanks_for_paying_and_unpaid_list(payer_name , not_paid_participants_list):
+def bot_isnt_admin_and_couldnt_pin_message():
+    return bot_isnt_admin_message() + "\n" + couldnt_pin_message()
+
+
+def thanks_for_paying_and_unpaid_list(payer_name, not_paid_participants_list):
     unpaid_text = "\n"
-    for unpaid in not_paid_participants_list :
+    for unpaid in not_paid_participants_list:
         unpaid_text += unpaid
         unpaid_text += "\n"
     return f"""ممنون از {payer_name} بابت پرداخت دنگ اش
                            افراد باقی مانده: {unpaid_text}
         """
 
-def the_new_payment_was_successfully_notified_in_group(could_the_bot_edit_last_pinned) :
-     if could_the_bot_edit_last_pinned  :
-         return "پرداختی جدید داخل گروه اعلام شد و همچنین متن دنگ edit شد."
-     else:
-         return "داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.(متن قبلی قابل دسترس نبود)"
+
+def the_new_payment_was_successfully_notified_in_group(could_the_bot_edit_last_pinned):
+    if could_the_bot_edit_last_pinned:
+        return "پرداختی جدید داخل گروه اعلام شد و همچنین متن دنگ edit شد."
+    else:
+        return "داخل گروه اعلام شد و همچنین متن دنگ جدید ارسال شد.(متن قبلی قابل دسترس نبود)"
+
 
 def some_one_just_payed_dong_in_reply_markup(payer_name):
     return f"""پرداخت دنگ {payer_name} با موفقیت تایید شد.
 """
-def dont_press_any_reply_markup() :
+
+
+def dont_press_any_reply_markup():
     return """از کلیک کردن دوباره روی دکمه های این پیام پرهیز کنید."""
+
 
 def you_approved_this_dong_before():
     return """شما این دنگ را تایید کردید.✅"""
+
 
 def couldnt_unpin_last_pinned_message():
     return """بات نتوانست پیام دنگ قبلی را unpin کند اگر pin است لطفا آن را unpin کنید چرا که فقط رسید های ریپلای شده روی اخرین پیام کار میکند."""

@@ -2,6 +2,7 @@ from __future__ import annotations
 import telebot.types
 from enum import Enum
 
+
 class UserState(Enum):
     STAGE_BEGIN = "stage_begin"
     STAGE_NAME = "stage_name"
@@ -11,20 +12,23 @@ class UserState(Enum):
     STAGE_CONFIRM = "stage_confirm"
     STAGE_IDLE = "stage_idle"
 
-class Dong :
-    local_dong_id : str
-    name : str
-    amount : int
-    participants : list
-    additional_info : str
-    big_prompt_message : telebot.types.Message
-    last_pinned_message_id : int
-    group_id : int
-    group_name : str
-    creator : User
+
+class Dong:
+    local_dong_id: str
+    name: str
+    amount: int
+    participants: list
+    additional_info: str
+    big_prompt_message: telebot.types.Message
+    last_pinned_message_id: int
+    group_id: int
+    group_name: str
+    creator: User
     creator_id = int
 
-    def __init__(self, dong_id = None, name = None, amount = None, participants =None, additional_info = None, big_prompt_message = None, group_id = None , creator=None , creator_id = None , group_name = None ,last_pinned_message_id = None  ):
+    def __init__(self, dong_id=None, name=None, amount=None, participants=None, additional_info=None,
+                 big_prompt_message=None, group_id=None, creator=None, creator_id=None, group_name=None,
+                 last_pinned_message_id=None):
         super().__init__()
         self.local_dong_id = dong_id
         self.name = name
@@ -37,16 +41,18 @@ class Dong :
         self.creator_id = creator_id
         self.group_name = group_name
         self.last_pinned_message_id = last_pinned_message_id
+
     def __repr__(self):
         return f"Dong(id={self.local_dong_id}, creator = {self.creator} , creator id = {self.creator_id}  , name={self.name}, amount={self.amount}, participants={self.participants}, additional_info={self.additional_info})"
 
 
-class User :
-    telegram_id : int
-    full_name : str
-    dong : list[Dong]
-    state : UserState
-    def __init__(self , telegram_id = None , dong = None , full_name = None , state = UserState.STAGE_BEGIN) :
+class User:
+    telegram_id: int
+    full_name: str
+    dong: list[Dong]
+    state: UserState
+
+    def __init__(self, telegram_id=None, dong=None, full_name=None, state=UserState.STAGE_BEGIN):
         super().__init__()
         self.telegram_id = telegram_id
         self.dong = dong
@@ -55,7 +61,6 @@ class User :
 
     def __repr__(self):
         return f"User(telegram_id={self.telegram_id},full name = {self.full_name} ,current_state = {self.state} ,  dongs={self.dong})"
-
 
 
 user_list = []

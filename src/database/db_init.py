@@ -1,5 +1,5 @@
 import asyncio
-from connection import create_pool , get_pool
+from connection import create_pool, get_pool
 from pathlib import Path
 
 
@@ -11,5 +11,3 @@ async def start_db_and_create_table_schema():
 
 
 asyncio.run(start_db_and_create_table_schema())
-
-

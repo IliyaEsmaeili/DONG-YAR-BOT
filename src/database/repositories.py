@@ -1,5 +1,6 @@
 from .connection import get_pool
-from data import User , Dong
+from data import User, Dong
+
 
 async def execute_query(query, *params):
     pool = get_pool()
@@ -25,10 +26,10 @@ async def save_user(user):
         await conn.execute(
             """
             INSERT INTO users
-            (telegram_id, full_name)
+                (telegram_id, full_name)
             VALUES ($1, $2)
-                ON CONFLICT(telegram_id) 
-                    DO UPDATE SET full_name = EXCLUDED.full_name 
+            ON CONFLICT(telegram_id)
+                DO UPDATE SET full_name = EXCLUDED.full_name
             """,
             user.telegram_id,
             user.full_name
@@ -41,13 +42,14 @@ async def save_dong(dong):
         await conn.execute(
             """
             INSERT INTO dongs
-            (group_id, creator_id ,group_name)
-            VALUES ($1, $2 , $3)
+                (group_id, creator_id, group_name)
+            VALUES ($1, $2, $3)
             """,
             dong.group_id,
             dong.creator_id,
             dong.group_name
         )
+
 
 async def user_state_fetch(message):
     telegram_id = message.from_user.id
@@ -66,8 +68,9 @@ async def user_state_fetch(message):
 
     return row["state"]
 
-async def change_user_state(user = None , state = None , telegram_id = None ):
-    if telegram_id is None :
+
+async def change_user_state(user=None, state=None, telegram_id=None):
+    if telegram_id is None:
         await execute_query(
             """
             UPDATE users
@@ -91,17 +94,22 @@ async def change_user_state(user = None , state = None , telegram_id = None ):
 
 async def get_user_from_telegram_id(telegram_id):
     row = await fetch_one(
-        """SELECT * FROM users WHERE telegram_id = $1
+        """SELECT *
+           FROM users
+           WHERE telegram_id = $1
         """,
         telegram_id)
     if row is None:
         return None
 
-    user = User(telegram_id=row["telegram_id"],full_name=row["full_name"],state=row["state"]
-    )
+    user = User(telegram_id=row["telegram_id"], full_name=row["full_name"], state=row["state"]
+                )
     user.dong = []
     dongs = await fetch_all(
-        """SELECT * FROM dongs WHERE creator_id = $1 ORDER BY id ASC 
+        """SELECT *
+           FROM dongs
+           WHERE creator_id = $1
+           ORDER BY id ASC
         """,
         telegram_id)
 
@@ -117,7 +125,9 @@ async def get_user_from_telegram_id(telegram_id):
         )
 
         participants = await fetch_all(
-            """SELECT * FROM dong_participants WHERE dong_id = $1
+            """SELECT *
+               FROM dong_participants
+               WHERE dong_id = $1
             """,
             dong.local_dong_id
         )
