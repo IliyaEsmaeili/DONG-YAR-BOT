@@ -69,5 +69,4 @@ def stage_begin_start_button() :
 
 
 def stage_confirm_submit_button():
-    return ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).row(
-        KeyboardButton(style="success", text="تایید و ارسال"))
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text="تایید و ارسال" , style="success" , callback_data="submit_dong")]])

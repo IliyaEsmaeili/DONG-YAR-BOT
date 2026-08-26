@@ -116,21 +116,24 @@ async def stage_additional_info(message, user):
                                                                                 amount=user.dong[-1].amount,
                                                                                 participants=user.dong[-1].participants,
                                                                                 info=user.dong[-1].additional_info))
-    await bot.edit_message_reply_markup(chat_id=message.from_user.id , message_id=bot_message_id)
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id , message_id=bot_message_id , reply_markup=keyboards.stage_confirm_submit_button())
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    await change_user_state(message.from_user, "stage_confirm")
+    #await change_user_state(message.from_user, "stage_confirm")
 
 
 
-async def stage_confirm(message, user):
+
+async def stage_confirm(user):
     bot_message_id = user.dong[-1].big_prompt_message
-    await bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message_id,
+    chat_id = user.telegram_id
+
+    await bot.edit_message_text(chat_id=chat_id, message_id=bot_message_id,
                                 text=mt.dong_creation_main_prompt(prompt="فرستاده شد.", step=5,
                                                                   dong_name=user.dong[-1].name,
                                                                   amount=user.dong[-1].amount,
                                                                   participants=user.dong[-1].participants,
                                                                   info=user.dong[-1].additional_info))
-    await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
+    #await bot.delete_message(message_id=message.id, chat_id=chat_id)
     sent = await bot.send_message(chat_id=user.dong[-1].group_id, text=mt.dong_summary_main_prompt(prompt=" ", step=5,
                                                                                          dong_name=user.dong[-1].name,
                                                                                          amount=user.dong[-1].amount,
@@ -140,9 +143,9 @@ async def stage_confirm(message, user):
                                                                                              -1].additional_info , creator_name=user.full_name , creator_id=user.telegram_id) , parse_mode="HTML" )
     await execute_query("""UPDATE dongs SET last_pinned_message_id = $1 WHERE id = $2
     """ , sent.id , user.dong[-1].local_dong_id)
-    await change_user_state(message.from_user, "stage_idle")
+    #await change_user_state(message.from_user, "stage_idle")
     try :
         await bot.pin_chat_message(chat_id=user.dong[-1].group_id , message_id=sent.id , disable_notification=False)
     except :
-        await bot.send_message(chat_id=message.from_user.id, text=mt.bot_isnt_admin_and_couldnt_pin_message())
+        await bot.send_message(chat_id=chat_id, text=mt.bot_isnt_admin_and_couldnt_pin_message())
 
