@@ -31,11 +31,6 @@ async def stage_begin(message , user):
                   """, bot_message.id, user.dong[-1].local_dong_id)
 
     await change_user_state(message.from_user, "stage_name")
-# @bot.callback_query_handler(lambda c : c.data == "stage_begin_start")
-# async def stage_begin_start_button_handler(call_back) :
-#     await change_user_state(call_back.from_user, "stage_name")
-#
-
 
 async def stage_name(message, user):
     user.dong[-1].name = message.text
@@ -83,6 +78,7 @@ async def stage_amount(message, user):
 async def stage_participants(message, user):
     participants = message.text.split(" ")
     user.dong[-1].participants = participants
+    await execute_query("""DELETE FROM dong_participants WHERE dong_id = $1""" , user.dong[-1].local_dong_id)
     for participant in participants :
         await execute_query("""INSERT INTO dong_participants(dong_id, user_name) VALUES ($1 , $2)
         """,user.dong[-1].local_dong_id , participant)
