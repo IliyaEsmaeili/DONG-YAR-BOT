@@ -1,71 +1,149 @@
-# 💸 Dongyar Bot (ربات دنگ یار)
+# Dongyar Bot (ربات دنگ یار)
 
 <img src="./assets/profile_picture copy_background_removed.png" width="150" align="right" alt="Dongyar Avatar">
 
-**Dongyar** is an open-source bot for [Bale](https://bale.ai/) and [Telegram](https://telegram.org/) designed to make bill splitting and group expense management incredibly easy. 
+**Dongyar** is an open-source bot for [Telegram](https://telegram.org/) designed to make bill splitting and group expense management easy.
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![pyTelegramBotAPI](https://img.shields.io/pypi/v/pyTelegramBotAPI?label=pyTelegramBotAPI&logo=telegram&logoColor=white)](https://pypi.org/project/pyTelegramBotAPI/)
+[![asyncpg](https://img.shields.io/pypi/v/asyncpg?label=asyncpg&logo=postgresql&logoColor=white)](https://pypi.org/project/asyncpg/)
+[![python-dotenv](https://img.shields.io/pypi/v/python-dotenv?label=python-dotenv)](https://pypi.org/project/python-dotenv/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-WIP-orange)](https://github.com/IliyaEsmaeili/DONG-YAR-BOT)
 
 > [!NOTE]
 > This project is currently a **Work In Progress (WIP)**. Many features are still under development!
 
 > [!IMPORTANT]
-> This project is currently in pre-release (prior to v1.0.0). It is not yet stable or production-ready, and you may encounter bugs, including threading issues.
+> This project is currently in pre-release (prior to v1.0.0). It is not yet stable or production-ready, and you may encounter bugs.
+
 ---
 
-## 🌟 Features 
+## Features
+
 **Currently implemented:**
-- Responds to group triggers (like "دنگ").
-- Basic setup and inline keyboard routing.
-- interact with user to create a Dong
+
+- Group trigger on the word `دنگ` with inline setup keyboard
+- Full private-chat dong creation wizard (name, amount, participants, notes, confirm)
+- PostgreSQL persistence for users, dongs, and participants
+- Pinned group summary message per dong with paid/unpaid tracking
+- Receipt submission via reply (text, photo, or document) to the pinned summary
+- Heuristic receipt text detection for bank transfer messages
+- Creator approval flow with inline buttons (approve payer / deny payment)
+- Live group updates when a payment is approved (summary edit, pin/unpin fallback)
+- Private `/start` menu with usage guide, GitHub info, and bot metadata
 
 **Planned / In Development:**
-- 🎭 **Custom Tones:** The bot will remind users to pay in different personas (Friendly, Strict, Literary, etc.).
-- 🧾 **Receipt Verification:** Users send their payment receipts, and the bot updates the remaining balance.
-- 📊 **Status Reports:** See exactly who has paid, who hasn't, and how much money is collected.
-- postgresql db connection
+
+- **Custom Tones:** Remind users to pay in different personas (Friendly, Strict, Literary, etc.)
+- **Smarter receipt handling:** OCR / image-based receipt parsing (photos are forwarded today, but not parsed)
+- **Status reports:** Richer dashboards for who paid, who did not, and total collected
+- **Stability & v1.0.0:** Hardening, tests, and a proper `requirements.txt`
 
 ---
 
-## 🚀 Installation & Setup 
+## Installation & Setup
 
 ### 1. Clone the repository
+
 ```bash
-git clone [repository_url]
+git clone https://github.com/IliyaEsmaeili/DONG-YAR-BOT.git
 cd DONG-YAR-BOT
 ```
 
 ### 2. Install dependencies
 
-Make sure you have Python installed. Then run:
+Make sure you have Python 3.10+ installed. Then run:
+
 ```bash
-pip install pyTelegramBotAPI python-dotenv
+pip install pyTelegramBotAPI python-dotenv asyncpg
 ```
-*(**Note:** Use `pip3` on Unix-based OS)*
 
-### 3. Environment Variables (.env)
-Create a `.env` file in the root directory and add your bot token. By default, the code looks for a Bale Bot Token:  
-  *(put this line in your `.env` file)*
+*(Use `pip3` on Unix-based systems.)*
+
+### 3. Set up PostgreSQL
+
+Create a database, then initialize the schema:
+
 ```bash
-BALE_BOT_TOKEN=your_bale_bot_token_here
+cd src/database
+python db_init.py
 ```
-*(**Note:** Do not put spaces around the `=` sign)*
 
-### 4. Running for Bale vs. Telegram
+*(Use `python3` on Unix-based systems. Run this from `src/database` so `schema.sql` resolves correctly.)*
 
-**For Bale Messenger (بله):**
-The code is currently configured for Bale by default  
-(due to development network constraints, Telegram will be the default upon completion). Just run:  
+### 4. Environment variables (`.env`)
+
+Create a `.env` file in the project root:
+
 ```bash
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=dongyar
+DB_USER_NAME=your_db_user
+```
+
+*(Do not put spaces around the `=` sign. Do not commit this file.)*
+
+### 5. Run the bot
+
+From the `src/` directory:
+
+```bash
+cd src
 python bot_main.py
 ```
-*(**Note:** Use `python3` on Unix-based OS)*
 
-**For Telegram (تلگرام):**
-If you want to use this bot on Telegram instead of Bale:
-1. Change the variable name in your `.env` file to `TELEGRAM_BOT_TOKEN` (optional, but recommended for clarity).
-2. Update the Python code to load the new variable name.
-3. **Crucial:** Remove or comment out this line in your code, as it redirects requests to Bale's API:
+*(Use `python3` on Unix-based systems.)*
 
-### 5. ⚠️Remove this line(on bale.py) for Telegram use!⚠️
-```python
-apihelper.API_URL = "https://tapi.bale.ai/bot{0}/{1}"
+The bot must be added to your Telegram group and granted admin rights if you want it to pin dong summary messages.
+
+---
+
+## Usage (quick overview)
+
+1. Add the bot to a group and type `دنگ`.
+2. The group admin (مادرخرج) taps **ایجاد دنگ جدید**.
+3. Complete the setup steps in a private chat with the bot.
+4. The bot posts and pins a summary in the group.
+5. Participants reply to that message with their receipt (text or image).
+6. The creator approves or denies the payment from their private chat.
+
+---
+
+## Project structure
+
 ```
+src/
+├── bot_main.py           # Entry point, handlers, receipt flow
+├── bot_instance.py       # AsyncTeleBot setup
+├── dong_handler.py       # Start dong creation from group
+├── stage_blue_prints.py  # Multi-step dong creation stages
+├── keyboards.py          # Reply & inline keyboards
+├── message_template.py   # Persian message templates
+├── data.py               # User / Dong models
+├── database/
+│   ├── connection.py     # asyncpg pool
+│   ├── repositories.py   # DB queries
+│   ├── schema.sql        # Tables
+│   └── db_init.py        # One-time schema setup
+└── util/
+    └── receipt_detector.py
+```
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+
