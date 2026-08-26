@@ -128,6 +128,7 @@ async def stage_additional_info(message, user):
 
 @bot.callback_query_handler(lambda call: call.data == "submit_dong")
 async def dong_submit_button_handler(call_back):
+    await bot.answer_callback_query(call_back.id)
     await change_user_state(telegram_id=call_back.from_user.id, state="stage_confirm")
     user = await get_user_from_telegram_id(telegram_id=call_back.from_user.id)
     await stage_confirm(user)

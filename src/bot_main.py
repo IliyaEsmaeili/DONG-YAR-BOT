@@ -149,6 +149,7 @@ async def handle_set_up_new_dong(call_back_query):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("paid_(dong:"))
 async def handle_receipt_approval(call_back_query):
+    await bot.answer_callback_query(call_back_query.id)
     rest = call_back_query.data.removeprefix("paid_(dong:")
     dong_id_str, payer_name = rest.split(")_", 1)
     dong_id = int(dong_id_str)
@@ -239,7 +240,7 @@ async def handle_receipt_approval(call_back_query):
 
 @bot.callback_query_handler(lambda call_back : call_back.data == "dong_payment_denied")
 async def handle_receipt_denial(call_back_query) :
-
+    await bot.answer_callback_query(call_back_query.id)
     await bot.edit_message_reply_markup(chat_id=call_back_query.from_user.id, message_id=call_back_query.message.id,
                                         reply_markup=keyboards.denied_payment_button())
 
