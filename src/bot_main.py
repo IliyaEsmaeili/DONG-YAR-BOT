@@ -1,3 +1,4 @@
+
 import telebot
 from telebot.types import InlineKeyboardMarkup
 import bot_instance
@@ -234,6 +235,13 @@ async def handle_receipt_approval(call_back_query):
                                         reply_markup=InlineKeyboardMarkup(
                                             keyboards.participants_to_approve(participants_list, dong_id,
                                                                               some_one_just_paid=payer_name)))
+
+
+@bot.callback_query_handler(lambda call_back : call_back.data == "dong_payment_denied")
+async def handle_receipt_denial(call_back_query) :
+
+    await bot.edit_message_reply_markup(chat_id=call_back_query.from_user.id, message_id=call_back_query.message.id,
+                                        reply_markup=keyboards.denied_payment_button())
 
 
 async def start_db_and_bot():

@@ -45,7 +45,7 @@ def participants_to_approve(participants_list, dong_id, some_one_just_paid=None)
                 [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}",
                                       style="primary")])
         participants_as_a_2d_vertical_keyboard_button_array.append(
-            [InlineKeyboardButton(text="تایید نمیشه", callback_data="paid_(dong:denied)", style="danger")])
+            [InlineKeyboardButton(text="تایید نمیشه", callback_data="dong_payment_denied", style="danger")])
     else:
         participants_as_a_2d_vertical_keyboard_button_array.append(
             [InlineKeyboardButton(text=mt.some_one_just_payed_dong_in_reply_markup(some_one_just_paid), style="success",
@@ -57,6 +57,8 @@ def participants_to_approve(participants_list, dong_id, some_one_just_paid=None)
 
     return participants_as_a_2d_vertical_keyboard_button_array
 
+def denied_payment_button():
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text="شما این پرداختی را رد کردید" , style="danger" , callback_data="dong_payment_denied_again")]])
 
 def stage_begin_start_button():
     return ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True).row(
@@ -66,3 +68,4 @@ def stage_begin_start_button():
 def stage_confirm_submit_button():
     return InlineKeyboardMarkup(
         [[InlineKeyboardButton(text="تایید و ارسال", style="success", callback_data="submit_dong")]])
+
