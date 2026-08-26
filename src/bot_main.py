@@ -1,5 +1,5 @@
 import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from telebot.types import InlineKeyboardMarkup
 import bot_instance
 import message_template as mt
 import dong_handler as dong
@@ -55,7 +55,7 @@ async def send_bot_guid_to_gap(message):
 # ----------
 # receipt check
 # ----------
-import pprint
+
 
 
 @bot.message_handler(func=lambda
