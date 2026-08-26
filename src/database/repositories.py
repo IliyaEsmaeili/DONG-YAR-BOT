@@ -101,7 +101,7 @@ async def get_user_from_telegram_id(telegram_id):
     )
     user.dong = []
     dongs = await fetch_all(
-        """SELECT * FROM dongs WHERE creator_id = $1 ORDER BY id DESC 
+        """SELECT * FROM dongs WHERE creator_id = $1 ORDER BY id ASC 
         """,
         telegram_id)
 

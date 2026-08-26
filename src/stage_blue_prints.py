@@ -138,7 +138,6 @@ async def stage_confirm(user):
                                                                   amount=user.dong[-1].amount,
                                                                   participants=user.dong[-1].participants,
                                                                   info=user.dong[-1].additional_info))
-    #await bot.delete_message(message_id=message.id, chat_id=chat_id)
     sent = await bot.send_message(chat_id=user.dong[-1].group_id, text=mt.dong_summary_main_prompt(prompt=" ", step=5,
                                                                                          dong_name=user.dong[-1].name,
                                                                                          amount=user.dong[-1].amount,
