@@ -1,7 +1,5 @@
 import telebot
-
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-
 import bot_instance
 import message_template as mt
 import dong_handler as dong
@@ -12,8 +10,8 @@ from database.connection import create_pool
 from database.repositories import save_user, fetch_one, fetch_all, execute_query
 
 bot = bot_instance.bot
-import logging
 
+import logging
 telebot.logger.setLevel(logging.DEBUG)
 
 # ----------
@@ -149,9 +147,6 @@ async def handle_set_up_new_dong(call_back_query):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("paid_(dong:"))
 async def handle_receipt_approval(call_back_query):
-    # paid_(dong:1):ایلیا
-    # data list will be like (as pseudo code): paid_(dong:{int:dong_id})_{str:user} ->>> [0]:paid || [1] : (dong_id:{int}) || [2] : {name:{str}}
-    # paid_(dong:12)_ایلیا
     rest = call_back_query.data.removeprefix("paid_(dong:")
     dong_id_str, payer_name = rest.split(")_", 1)
     dong_id = int(dong_id_str)

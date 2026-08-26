@@ -38,10 +38,6 @@ dong_set_up = InlineKeyboardMarkup(
 # APPROVAL MESSAGE
 # ----------
 def participants_to_approve(participants_list, dong_id, some_one_just_paid=None):
-    # participants_as_a_2d_vertical_keyboard_button_array = [
-    #     [InlineKeyboardButton(text=participant, callback_data=f"paid_(dong:{dong_id})_{participant}" , style="primary")] for participant in
-    #     participants_list
-    # ]
     participants_as_a_2d_vertical_keyboard_button_array = []
     if some_one_just_paid is None:
         for participant in participants_list:
