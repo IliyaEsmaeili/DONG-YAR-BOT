@@ -8,6 +8,7 @@ import asyncio
 from data import User
 from database.connection import create_pool
 from database.repositories import save_user, fetch_one, fetch_all, execute_query
+from util import receipt_detector
 
 bot = bot_instance.bot
 
@@ -56,8 +57,8 @@ async def send_bot_guid_to_gap(message):
 # receipt check
 # ----------
 
-
-
+import util.receipt_detector
+@bot.message_handler(func=lambda message : receipt_detector.is_bank_receipt(message.text) )
 @bot.message_handler(func=lambda
         message: message.reply_to_message is not None and message.reply_to_message.from_user.id == bot_info.id and any(
     word in message.text for word in ["پرداخت دنگ"]))
