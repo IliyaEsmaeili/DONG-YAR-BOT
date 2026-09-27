@@ -82,7 +82,7 @@ async def stage_amount(message, user):
                                                                   dong_name=user.dong[-1].name,
                                                                   amount=user.dong[-1].amount))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
-                                        reply_markup=keyboards.prev_stage_and_cancel())
+                                        reply_markup=keyboards.prev_stage_and_cancel(user.telegram_id , stage = "stage_amount"))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_participants")
 
@@ -106,7 +106,7 @@ async def stage_participants(message, user):
                                     dong_name=user.dong[-1].name,
                                     amount=user.dong[-1].amount, participants=user.dong[-1].participants))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
-                                        reply_markup=keyboards.prev_stage_and_cancel())
+                                        reply_markup=keyboards.prev_stage_and_cancel(user.telegram_id , stage = "stage_participants"))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_additional_info")
 
