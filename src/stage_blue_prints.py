@@ -89,6 +89,15 @@ async def stage_amount(message, user):
 
 async def stage_participants(message, user):
     participants = message.text.split(" ")
+    hasDuplicate = False
+    for i in range(len(participants)):
+        if participants.count(participants[i]) > 1: hasDuplicate = True
+    if hasDuplicate :
+        sent_temp = await bot.send_message(chat_id=message.from_user.id, text=mt.stage_participants_validation_prompt())
+        await asyncio.sleep(3)
+        await bot.delete_message(chat_id=message.from_user.id, message_id=sent_temp.id)
+        await bot.delete_message(chat_id=message.from_user.id, message_id=message.id)
+        return
     user.dong[-1].participants = participants
     await execute_query("""DELETE
                            FROM dong_participants

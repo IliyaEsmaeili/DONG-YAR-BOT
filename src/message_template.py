@@ -166,7 +166,9 @@ def stage_participants_prompt():
 محمد-رضا-قربانی محمد-رضا-محمدی
     """
 
-
+def stage_participants_validation_prompt():
+    return f"""لطفا نام اعضا متمایز باشد!
+"""
 def stage_additional_info_prompt():
     return """اگر لازم می‌دونی شماره کارت، توضیح یا جزئیات بیشتر رو وارد کن 📝
 مثلاً:
