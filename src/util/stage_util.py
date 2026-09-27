@@ -6,6 +6,6 @@ def prev_stage(stage_str):
     idx = stages.index(stage)
     prev_idx = idx - 1
     if prev_idx > 0:
-        return stages[prev_idx]
+        return stages[prev_idx].value
     else:
         return None
