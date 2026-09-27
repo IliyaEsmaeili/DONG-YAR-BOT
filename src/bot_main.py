@@ -7,8 +7,10 @@ import dong_handler as dong
 import keyboards
 import asyncio
 from data import User
+from database import repositories
 from database.connection import create_pool
 from database.repositories import save_user, fetch_one, fetch_all, execute_query
+from message_template import wait_until_prev
 from util import receipt_detector, stage_util
 
 bot = bot_instance.bot
@@ -244,17 +246,104 @@ async def handle_receipt_denial(call_back_query) :
     await bot.edit_message_reply_markup(chat_id=call_back_query.from_user.id, message_id=call_back_query.message.id,
                                         reply_markup=keyboards.denied_payment_button())
 
-
+import database.repositories
 @bot.callback_query_handler(lambda call_back : call_back.data.startswith("prev_stage_"))
 async def prev_stage_button_handler(call_back_query):
     rest = call_back_query.data.removeprefix("prev_stage_") #32424242_stage_name
     user_id_str , stage = rest.split("_" , 1)
     user_id = int(user_id_str)
-    fetch_data = await fetch_one("SELECT * FROM users WHERE telegram_id = $1" , user_id)
-    print(fetch_data["state"])
-    print(stage)
-    if stage_util.prev_stage(fetch_data["state"]) != stage : return None
-    await execute_query("""UPDATE users SET state = $1 WHERE telegram_id = $2""" , stage, user_id)
+    user = await repositories.get_user_from_telegram_id(telegram_id=user_id)
+
+    await execute_query("""UPDATE users SET state = $1 WHERE telegram_id = $2""" , stage_util.prev_stage(user.state), user_id)
+    new_stage = stage_util.prev_stage(user.state)
+    def get_stage_prompt(user, stage):
+        dong = user.dong[-1]
+
+        match stage:
+            case "stage_name":
+                return (
+                    mt.dong_creation_main_prompt(
+                        prompt=mt.stage_name_prompt(),
+                        dong_name="-",
+                        step=0,
+                    ),
+                    keyboards.cancel_set_up(
+
+                    )
+                )
+
+            case "stage_amount":
+                return (
+                    mt.dong_creation_main_prompt(
+                        prompt=mt.stage_amount_prompt(),
+                        step=1,
+                        dong_name=dong.name,
+                        amount="-",
+                    ),
+                    keyboards.prev_stage_and_cancel(
+                        stage=stage,
+                        user_id=user.telegram_id
+                    )
+                )
+
+            case "stage_participants":
+                return (
+                    mt.dong_creation_main_prompt(
+                        prompt=mt.stage_participants_prompt(),
+                        step=2,
+                        dong_name=dong.name,
+                        amount=dong.amount,
+                        participants="-",
+                    ),
+                    keyboards.prev_stage_and_cancel(
+                        stage=stage,
+                        user_id=user.telegram_id
+                    )
+                )
+
+            case "stage_additional_info":
+                return (
+                    mt.dong_creation_main_prompt(
+                        prompt=mt.stage_additional_info_prompt(),
+                        step=3,
+                        dong_name=dong.name,
+                        amount=dong.amount,
+                        participants=dong.participants,
+                        info="-",
+                    ),
+                    keyboards.prev_stage_and_cancel(
+                        stage=stage,
+                        user_id=user.telegram_id
+                    )
+                )
+
+            case "stage_confirm":
+                return (
+                    mt.dong_creation_main_prompt(
+                        prompt=mt.stage_confirm_prompt(),
+                        step=4,
+                        dong_name=dong.name,
+                        amount=dong.amount,
+                        participants=dong.participants,
+                        info=dong.additional_info,
+                    ),
+                    keyboards.prev_stage_and_cancel(
+                        stage=stage,
+                        user_id=user.telegram_id
+                    )
+                )
+
+    text, reply_markup = get_stage_prompt(
+        stage=new_stage,
+        user=user
+    )
+
+    await bot.edit_message_text(
+        chat_id=user.telegram_id,
+        message_id=user.dong[-1].big_prompt_message,
+        text=text,
+        reply_markup=reply_markup
+    )
 
 async def start_db_and_bot():
     await create_pool()
