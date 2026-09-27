@@ -244,6 +244,12 @@ async def handle_receipt_denial(call_back_query) :
     await bot.edit_message_reply_markup(chat_id=call_back_query.from_user.id, message_id=call_back_query.message.id,
                                         reply_markup=keyboards.denied_payment_button())
 
+@bot.callback_query_handler(lambda call_back : call_back.data.startwith("prev_stage"))
+async def prev_stage_button_handler(call_back_query):
+    user_id = call_back_query.data.removeprefix("prev_stage")
+    print(user_id)
+    new_state = 2
+    await execute_query("""UPDATE USERS SET state = $1 WHERE id = $2""" , new_state , user_id)
 
 async def start_db_and_bot():
     await create_pool()
