@@ -54,7 +54,7 @@ async def stage_name(message, user):
                                 text=mt.dong_creation_main_prompt(prompt=mt.stage_amount_prompt(), step=1,
                                                                   dong_name=user.dong[-1].name))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
-                                        reply_markup=keyboards.prev_stage_and_cancel())
+                                        reply_markup=keyboards.prev_stage_and_cancel(stage="stage_name" , user_id=user.telegram_id))
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_amount")
 

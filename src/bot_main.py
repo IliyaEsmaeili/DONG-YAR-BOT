@@ -9,7 +9,7 @@ import asyncio
 from data import User
 from database.connection import create_pool
 from database.repositories import save_user, fetch_one, fetch_all, execute_query
-from util import receipt_detector
+from util import receipt_detector, stage_util
 
 bot = bot_instance.bot
 
@@ -244,12 +244,17 @@ async def handle_receipt_denial(call_back_query) :
     await bot.edit_message_reply_markup(chat_id=call_back_query.from_user.id, message_id=call_back_query.message.id,
                                         reply_markup=keyboards.denied_payment_button())
 
-@bot.callback_query_handler(lambda call_back : call_back.data.startwith("prev_stage"))
+
+@bot.callback_query_handler(lambda call_back : call_back.data.startswith("prev_stage_"))
 async def prev_stage_button_handler(call_back_query):
-    user_id = call_back_query.data.removeprefix("prev_stage")
-    print(user_id)
-    new_state = 2
-    await execute_query("""UPDATE USERS SET state = $1 WHERE id = $2""" , new_state , user_id)
+    rest = call_back_query.data.removeprefix("prev_stage_") #32424242_stage_name
+    user_id_str , stage = rest.split("_" , 1)
+    user_id = int(user_id_str)
+    fetch_data = await fetch_one("SELECT * FROM users WHERE telegram_id = $1" , user_id)
+    print(fetch_data["state"])
+    print(stage)
+    if stage_util.prev_stage(fetch_data["state"]) != stage : return None
+    await execute_query("""UPDATE users SET state = $1 WHERE telegram_id = $2""" , stage, user_id)
 
 async def start_db_and_bot():
     await create_pool()
