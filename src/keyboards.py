@@ -67,5 +67,9 @@ def stage_begin_start_button():
 
 def stage_confirm_submit_button():
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="تایید و ارسال", style="success", callback_data="submit_dong")]])
+        [[InlineKeyboardButton(text="تایید و ارسال", style="success", callback_data="submit_dong")] , [InlineKeyboardButton(text="کنسل ⃠", style="danger", callback_data="cancel_dong_set_up")]])
 
+def prev_stage_and_cancel():
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data="prev_stage") ,InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data="cancel_dong_set_up") ]])
+def cancel_set_up():
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data="cancel_dong_set_up") ]])

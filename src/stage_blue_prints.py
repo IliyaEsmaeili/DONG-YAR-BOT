@@ -32,7 +32,8 @@ async def dong_creation_router(message):
 async def stage_begin(message, user):
     bot_message = await bot.send_message(message.from_user.id,
                                          mt.dong_creation_main_prompt(prompt=mt.stage_name_prompt(), step=0))
-
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message.id,
+                                        reply_markup=keyboards.cancel_set_up())
     await execute_query("""UPDATE dongs
                            SET big_prompt_message = $1
                            WHERE id = $2
@@ -52,6 +53,8 @@ async def stage_name(message, user):
     await bot.edit_message_text(chat_id=message.from_user.id, message_id=bot_message_id,
                                 text=mt.dong_creation_main_prompt(prompt=mt.stage_amount_prompt(), step=1,
                                                                   dong_name=user.dong[-1].name))
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
+                                        reply_markup=keyboards.prev_stage_and_cancel())
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_amount")
 
@@ -78,6 +81,8 @@ async def stage_amount(message, user):
                                                                   step=2,
                                                                   dong_name=user.dong[-1].name,
                                                                   amount=user.dong[-1].amount))
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
+                                        reply_markup=keyboards.prev_stage_and_cancel())
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_participants")
 
@@ -100,6 +105,8 @@ async def stage_participants(message, user):
                                     prompt=mt.stage_additional_info_prompt(), step=3,
                                     dong_name=user.dong[-1].name,
                                     amount=user.dong[-1].amount, participants=user.dong[-1].participants))
+    await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
+                                        reply_markup=keyboards.prev_stage_and_cancel())
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     await change_user_state(message.from_user, "stage_additional_info")
 
@@ -122,6 +129,7 @@ async def stage_additional_info(message, user):
                                                                   info=user.dong[-1].additional_info))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
                                         reply_markup=keyboards.stage_confirm_submit_button())
+
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     # await change_user_state(message.from_user, "stage_confirm")
 
