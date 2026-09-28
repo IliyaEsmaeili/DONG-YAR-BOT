@@ -71,5 +71,5 @@ def stage_confirm_submit_button(user_id , stage):
 
 def prev_stage_and_cancel(user_id , stage):
     return InlineKeyboardMarkup([[InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data=f"prev_stage_{user_id}_{stage}") ,InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data="cancel_dong_set_up") ]])
-def cancel_set_up():
-    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data="cancel_dong_set_up") ]])
+def cancel_set_up(user_id):
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data=f"cancel_dong_set_up_{user_id}") ]])

@@ -33,7 +33,7 @@ async def stage_begin(message, user):
     bot_message = await bot.send_message(message.from_user.id,
                                          mt.dong_creation_main_prompt(prompt=mt.stage_name_prompt(), step=0))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message.id,
-                                        reply_markup=keyboards.cancel_set_up())
+                                        reply_markup=keyboards.cancel_set_up(user_id=user.telegram_id))
     await execute_query("""UPDATE dongs
                            SET big_prompt_message = $1
                            WHERE id = $2
