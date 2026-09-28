@@ -137,7 +137,7 @@ async def stage_additional_info(message, user):
                                                                   participants=user.dong[-1].participants,
                                                                   info=user.dong[-1].additional_info))
     await bot.edit_message_reply_markup(chat_id=message.from_user.id, message_id=bot_message_id,
-                                        reply_markup=keyboards.stage_confirm_submit_button())
+                                        reply_markup=keyboards.stage_confirm_submit_button(stage="stage_additional_info" , user_id=user.telegram_id))
 
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
     # await change_user_state(message.from_user, "stage_confirm")
