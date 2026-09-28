@@ -113,22 +113,22 @@ Add the bot to your Telegram group. Grant it admin rights if you want summary me
 ## Project structure
 
 ```
-src/
-├── bot_main.py           # Entry point, handlers, receipt flow
-├── bot_instance.py       # AsyncTeleBot setup
-├── dong_handler.py       # Start dong creation from group
-├── stage_blue_prints.py  # Multi-step dong creation stages
-├── keyboards.py          # Reply & inline keyboards
-├── message_template.py   # Persian message templates
-├── data.py               # User / Dong models
-├── database/
-│   ├── connection.py     # asyncpg pool
-│   ├── repositories.py   # DB queries
-│   ├── schema.sql        # Tables
-│   └── db_init.py        # One-time schema setup
-└── util/
-    ├── receipt_detector.py
-    └── stage_util.py
+└── src
+    ├── bot_instance.py
+    ├── bot_main.py
+    ├── data.py
+    ├── database
+    │   ├── connection.py
+    │   ├── db_init.py
+    │   ├── repositories.py
+    │   └── schema.sql
+    ├── dong_handler.py
+    ├── keyboards.py
+    ├── message_template.py
+    ├── stage_blue_prints.py
+    └── util
+        ├── receipt_detector.py
+        └── stage_util.py
 ```
 
 ---
