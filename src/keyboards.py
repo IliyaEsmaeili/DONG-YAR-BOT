@@ -67,9 +67,9 @@ def stage_begin_start_button():
 
 def stage_confirm_submit_button(user_id , stage):
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="تایید و ارسال", style="success", callback_data="submit_dong")] , [InlineKeyboardButton(text="کنسل ⃠", style="danger", callback_data="cancel_dong_set_up")] , [InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data=f"prev_stage_{user_id}_{stage}") ]])
+        [[InlineKeyboardButton(text="تایید و ارسال", style="success", callback_data="submit_dong")] , [InlineKeyboardButton(text="کنسل ⃠", style="danger", callback_data=f"cancel_dong_set_up_{user_id}")] , [InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data=f"prev_stage_{user_id}_{stage}") ]])
 
 def prev_stage_and_cancel(user_id , stage):
-    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data=f"prev_stage_{user_id}_{stage}") ,InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data="cancel_dong_set_up") ]])
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text = "مرحله قبل🔙" , style="primary" , callback_data=f"prev_stage_{user_id}_{stage}") ,InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data=f"cancel_dong_set_up_{user_id}") ]])
 def cancel_set_up(user_id):
     return InlineKeyboardMarkup([[InlineKeyboardButton(text = "کنسل ⃠" , style="danger" , callback_data=f"cancel_dong_set_up_{user_id}") ]])

@@ -347,14 +347,13 @@ async def prev_stage_button_handler(call_back_query):
 
 @bot.callback_query_handler(lambda call : call.data.startswith("cancel_dong_set_up"))
 async def cancel_dong_set_up_handler(call_back_query):
-    print("heyyy")
     user_id = call_back_query.data.removeprefix("cancel_dong_set_up_")
     user_id = int(user_id)
     user = await repositories.get_user_from_telegram_id(telegram_id=user_id)
     await bot.delete_message(chat_id=user.telegram_id , message_id= user.dong[-1].big_prompt_message)
     await repositories.change_user_state(telegram_id=user_id , state= "stage_idle")
     sent = await bot.send_message(chat_id=user.telegram_id , text=mt.dong_set_up_canceled())
-    await asyncio.sleep(4)
+    await asyncio.sleep(2)
     await bot.delete_message(message_id=sent.message_id , chat_id=user.telegram_id)
 
     await bot.send_message(user_id, text=mt.welcome_menu_on_start(), reply_markup=keyboards.main_keyboard)
