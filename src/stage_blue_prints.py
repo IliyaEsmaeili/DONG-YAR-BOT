@@ -140,13 +140,13 @@ async def stage_additional_info(message, user):
                                         reply_markup=keyboards.stage_confirm_submit_button(stage="stage_additional_info" , user_id=user.telegram_id))
 
     await bot.delete_message(message_id=message.id, chat_id=message.from_user.id)
-    # await change_user_state(message.from_user, "stage_confirm")
+    await change_user_state(message.from_user, "stage_confirm")
 
 
 @bot.callback_query_handler(lambda call: call.data == "submit_dong")
 async def dong_submit_button_handler(call_back):
     await bot.answer_callback_query(call_back.id)
-    await change_user_state(telegram_id=call_back.from_user.id, state="stage_confirm")
+    # await change_user_state(telegram_id=call_back.from_user.id, state="stage_confirm")
     user = await get_user_from_telegram_id(telegram_id=call_back.from_user.id)
     await stage_confirm(user)
 
