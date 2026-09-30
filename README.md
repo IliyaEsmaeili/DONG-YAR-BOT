@@ -69,6 +69,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=dongyar
 DB_USER_NAME=your_db_user
+DB_PASSWORD=your_strong_password
 ```
 
 
