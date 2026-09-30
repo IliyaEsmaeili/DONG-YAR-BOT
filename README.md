@@ -51,7 +51,7 @@ cd DONG-YAR-BOT
 ```
 
 ### 2. Install dependencies
-
+first create your python venv then 
 ```bash
 pip install pyTelegramBotAPI python-dotenv asyncpg
 ```
