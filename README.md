@@ -56,20 +56,8 @@ first create your python venv then
 pip install pyTelegramBotAPI python-dotenv asyncpg
 ```
 
-Use `pip3` on Unix-based systems if needed.
 
-### 3. Set up PostgreSQL
-
-Create an empty database, then load the schema:
-
-```bash
-cd src/database
-python db_init.py
-```
-
-Use `python3` on Unix-based systems if needed. Run this from `src/database` so `schema.sql` resolves correctly.
-
-### 4. Environment variables (`.env`)
+### 3. Environment variables (`.env`)
 
 Create a `.env` file in the project root:
 
@@ -81,6 +69,20 @@ DB_PORT=5432
 DB_NAME=dongyar
 DB_USER_NAME=your_db_user
 ```
+
+Use `pip3` on Unix-based systems if needed.
+
+### 4. Set up PostgreSQL
+
+Create an empty database, then load the schema:
+
+```bash
+cd src/database
+python db_init.py
+```
+
+Use `python3` on Unix-based systems if needed. Run this from `src/database` so `schema.sql` resolves correctly.
+
 
 Do not put spaces around `=`. Do not commit this file.
 
