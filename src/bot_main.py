@@ -39,14 +39,16 @@ async def send_welcome(message):
     await bot.send_message(message.chat.id, text=mt.welcome_message_on_start(), reply_markup=keyboards.main_keyboard)
     await bot.send_message(message.chat.id, text=mt.welcome_menu_on_start(), reply_markup=keyboards.start_inline)
 
-
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+HEARED_DONG = BASE_DIR / "assets" / "heared_dong.png"
 @bot.message_handler(regexp=r"^دنگ$")
 async def send_bot_guid_to_gap(message):
     if message.chat.type not in ("group", "supergroup"): return
 
     if "heard_dong_asset" not in asset_file_ids_cache:
         sent_message = await  bot.send_photo(chat_id=message.chat.id,
-                                             photo=telebot.types.InputFile("../assets/heared_dong.png", "dong_yar_bot"),
+                                             photo=telebot.types.InputFile(str(HEARED_DONG), "dong_yar_bot"),
                                              caption=mt.heard_dong(), reply_markup=keyboards.dong_set_up)
         async with asset_file_ids_cache_lock:
             asset_file_ids_cache["heard_dong_asset"] = sent_message.photo[-1].file_id
